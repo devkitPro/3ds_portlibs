@@ -5,9 +5,13 @@ Here is a Makefile for building various portlibs for 3DS. You need to first
 build zlib and install it. Then you can build the other portlibs.
 
     $ make zlib
-    $ sudo make install-zlib
+    $ make install-zlib
     $ make
     $ make install
+
+This will install the portlibs to $DEVKITPRO/portlibs/armv6k. If this is a
+privileged location, you will need to `sudo make install-zlib` and `sudo make
+install` in order for the portlibs to be installed.
 
 Currently supports the following portlibs:
 
