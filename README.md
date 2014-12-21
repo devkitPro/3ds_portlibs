@@ -6,7 +6,7 @@ build zlib and install it. Then you can build the other portlibs.
 
     $ make zlib
     $ make install-zlib
-    $ make
+    $ make <targets>
     $ make install
 
 This will install the portlibs to `$DEVKITPRO/portlibs/armv6k`. If this is a

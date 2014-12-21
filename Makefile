@@ -25,7 +25,6 @@ ZLIB_SRC             := $(ZLIB_VERSION).tar.gz
 export PORTLIBS        := $(DEVKITPRO)/portlibs/armv6k
 export PATH            := $(DEVKITARM)/bin:$(PATH)
 export PKG_CONFIG_PATH := $(PORTLIBS)/lib/pkgconfig
-# TODO: change float-abi to hard when it's ready
 export CFLAGS          := -march=armv6k -mtune=mpcore -mfloat-abi=softfp -O3 \
                           -mword-relocations -fomit-frame-pointer -ffast-math
 export CPPFLAGS        := -I$(PORTLIBS)/include
@@ -39,58 +38,62 @@ export LDFLAGS         := -L$(PORTLIBS)/lib
         $(SQLITE) \
         $(ZLIB)
 
-all: $(FREETYPE) \
-     $(LIBEXIF) \
-     $(LIBJPEGTURBO) \
-     $(LIBPNG) \
-     $(SQLITE)
+all:
+	@echo "Please choose one of the following targets:"
+	@echo "  $(FREETYPE) (requires zlib to be installed)"
+	@echo "  $(LIBEXIF)"
+	@echo "  $(LIBJPEGTURBO)"
+	@echo "  $(LIBPNG) (requires zlib to be installed)"
+	@echo "  $(SQLITE)"
+	@echo "  $(ZLIB)"
 
 $(FREETYPE): $(FREETYPE_SRC)
 	@[ -d $(FREETYPE_VERSION) ] || tar -xaf $<
 	@cd $(FREETYPE_VERSION) && \
 	 ./configure --prefix=$(PORTLIBS) --host=arm-none-eabi --disable-shared --enable-static
-	@$(MAKE) -j4 -C $(FREETYPE_VERSION)
+	@$(MAKE) -C $(FREETYPE_VERSION)
 
 $(LIBEXIF): $(LIBEXIF_SRC)
 	@[ -d $(LIBEXIF_VERSION) ] || tar -xaf $<
 	@cd $(LIBEXIF_VERSION) && \
 	 ./configure --prefix=$(PORTLIBS) --host=arm-none-eabi --disable-shared --enable-static
-	@$(MAKE) -j4 -C $(LIBEXIF_VERSION)
+	@$(MAKE) -C $(LIBEXIF_VERSION)
 
 $(LIBJPEGTURBO): $(LIBJPEGTURBO_SRC)
 	@[ -d $(LIBJPEGTURBO_VERSION) ] || tar -xaf $<
 	@cd $(LIBJPEGTURBO_VERSION) && \
 	 ./configure --prefix=$(PORTLIBS) --host=arm-none-eabi --disable-shared --enable-static
-	@$(MAKE) -j4 CFLAGS+="\"-Drandom()=rand()\"" -C $(LIBJPEGTURBO_VERSION)
+	@$(MAKE) CFLAGS+="\"-Drandom()=rand()\"" -C $(LIBJPEGTURBO_VERSION)
 
 $(LIBPNG): $(LIBPNG_SRC)
 	@[ -d $(LIBPNG_VERSION) ] || tar -xaf $<
 	@cd $(LIBPNG_VERSION) && \
 	 ./configure --prefix=$(PORTLIBS) --host=arm-none-eabi --disable-shared --enable-static
-	@$(MAKE) -j4 -C $(LIBPNG_VERSION)
+	@$(MAKE) -C $(LIBPNG_VERSION)
 
 # sqlite won't work with -ffast-math
 $(SQLITE): $(SQLITE_SRC)
 	@[ -d $(SQLITE_VERSION) ] || tar -xaf $<
 	@cd $(SQLITE_VERSION) && \
 	 CFLAGS="$(filter-out -ffast-math,$(CFLAGS)) -DSQLITE_OS_OTHER=1" ./configure --disable-shared --disable-threadsafe --disable-dynamic-extensions --host=arm-none-eabi --prefix=$(PORTLIBS)
-	@$(MAKE) -j4 -C $(SQLITE_VERSION) libsqlite3.la
+	# avoid building sqlite3 shell
+	@$(MAKE) -C $(SQLITE_VERSION) libsqlite3.la
 
 $(ZLIB): $(ZLIB_SRC)
 	@[ -d $(ZLIB_VERSION) ] || tar -xaf $<
 	@cd $(ZLIB_VERSION) && \
 	 CHOST=arm-none-eabi ./configure --static --prefix=$(PORTLIBS)
-	@$(MAKE) -j4 -C $(ZLIB_VERSION)
+	@$(MAKE) -C $(ZLIB_VERSION)
 
 install-zlib: 
 	@$(MAKE) -C $(ZLIB_VERSION) install
 
 install:
-	@$(MAKE) -C $(FREETYPE_VERSION) install
-	@$(MAKE) -C $(LIBEXIF_VERSION) install
-	@$(MAKE) -C $(LIBJPEGTURBO_VERSION) install
-	@$(MAKE) -C $(LIBPNG_VERSION) install
-	@$(MAKE) -C $(SQLITE_VERSION) install-libLTLIBRARIES install-data
+	@[ ! -d $(FREETYPE_VERSION) ] || $(MAKE) -C $(FREETYPE_VERSION) install
+	@[ ! -d $(LIBEXIF_VERSION) ] || $(MAKE) -C $(LIBEXIF_VERSION) install
+	@[ ! -d $(LIBJPEGTURBO_VERSION) ] || $(MAKE) -C $(LIBJPEGTURBO_VERSION) install
+	@[ ! -d $(LIBPNG_VERSION) ] || $(MAKE) -C $(LIBPNG_VERSION) install
+	@[ ! -d $(SQLITE_VERSION) ] || $(MAKE) -C $(SQLITE_VERSION) install-libLTLIBRARIES install-data
 
 clean:
 	@$(RM) -r $(FREETYPE_VERSION)
