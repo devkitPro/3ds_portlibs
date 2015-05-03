@@ -25,7 +25,7 @@ ZLIB_SRC             := $(ZLIB_VERSION).tar.gz
 export PORTLIBS        := $(DEVKITPRO)/portlibs/armv6k
 export PATH            := $(DEVKITARM)/bin:$(PATH)
 export PKG_CONFIG_PATH := $(PORTLIBS)/lib/pkgconfig
-export CFLAGS          := -march=armv6k -mtune=mpcore -mfloat-abi=softfp -O3 \
+export CFLAGS          := -march=armv6k -mtune=mpcore -mfloat-abi=hard -O3 \
                           -mword-relocations -fomit-frame-pointer -ffast-math
 export CPPFLAGS        := -I$(PORTLIBS)/include
 export LDFLAGS         := -L$(PORTLIBS)/lib
