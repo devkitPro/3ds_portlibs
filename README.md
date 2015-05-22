@@ -4,9 +4,12 @@
 Here is a Makefile for building various portlibs for 3DS.
 
 Type:
+
     $ make
 or:
+
     $ make all
+
 to download and install all the libraries at once.
 
 You can build and install the libraries separately:
