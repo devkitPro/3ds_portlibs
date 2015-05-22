@@ -1,26 +1,32 @@
 FREETYPE             := freetype
-FREETYPE_VERSION     := $(FREETYPE)-2.5.4
+FREETYPE_VERSION     := $(FREETYPE)-2.5.5
 FREETYPE_SRC         := $(FREETYPE_VERSION).tar.bz2
+FREETYPE_DOWNLOAD    := "http://download.savannah.gnu.org/releases/freetype/freetype-2.5.5.tar.bz2"
 
 LIBEXIF              := libexif
 LIBEXIF_VERSION      := $(LIBEXIF)-0.6.21
 LIBEXIF_SRC          := $(LIBEXIF_VERSION).tar.bz2
+LIBEXIF_DOWNLOAD     := "http://sourceforge.net/projects/libexif/files/libexif/0.6.21/libexif-0.6.21.tar.bz2"
 
 LIBJPEGTURBO         := libjpeg-turbo
-LIBJPEGTURBO_VERSION := $(LIBJPEGTURBO)-1.3.1
+LIBJPEGTURBO_VERSION := $(LIBJPEGTURBO)-1.4.0
 LIBJPEGTURBO_SRC     := $(LIBJPEGTURBO_VERSION).tar.gz
+LIBJPEGTURBO_DOWNLOAD := "http://sourceforge.net/projects/libjpeg-turbo/files/1.4.0/libjpeg-turbo-1.4.0.tar.gz"
 
 LIBPNG               := libpng
-LIBPNG_VERSION       := $(LIBPNG)-1.6.15
+LIBPNG_VERSION       := $(LIBPNG)-1.6.17
 LIBPNG_SRC           := $(LIBPNG_VERSION).tar.xz
+LIBPNG_DOWNLOAD      := "http://prdownloads.sourceforge.net/libpng/libpng-1.6.17.tar.xz"
 
 SQLITE               := sqlite
-SQLITE_VERSION       := $(SQLITE)-autoconf-3080704
+SQLITE_VERSION       := $(SQLITE)-autoconf-3081002
 SQLITE_SRC           := $(SQLITE_VERSION).tar.gz
+SQLITE_DOWNLOAD      := "http://www.sqlite.org/2015/sqlite-autoconf-3081002.tar.gz"
 
 ZLIB                 := zlib
 ZLIB_VERSION         := $(ZLIB)-1.2.8
 ZLIB_SRC             := $(ZLIB_VERSION).tar.gz
+ZLIB_DOWNLOAD        := "http://prdownloads.sourceforge.net/libpng/zlib-1.2.8.tar.gz"
 
 export PORTLIBS        := $(DEVKITPRO)/portlibs/armv6k
 export PATH            := $(DEVKITARM)/bin:$(PATH)
@@ -30,15 +36,17 @@ export CFLAGS          := -march=armv6k -mtune=mpcore -mfloat-abi=hard -O3 \
 export CPPFLAGS        := -I$(PORTLIBS)/include
 export LDFLAGS         := -L$(PORTLIBS)/lib
 
-.PHONY: all install install-zlib clean \
+.PHONY: all old_all install install-zlib clean \
         $(FREETYPE) \
         $(LIBEXIF) \
         $(LIBJPEGTURBO) \
         $(LIBPNG) \
         $(SQLITE) \
         $(ZLIB)
+all: zlib install-zlib freetype libexif libjpeg-turbo libpng sqlite install
+	@echo "Finished!"
 
-all:
+old_all:
 	@echo "Please choose one of the following targets:"
 	@echo "  $(FREETYPE) (requires zlib to be installed)"
 	@echo "  $(LIBEXIF)"
@@ -85,7 +93,26 @@ $(ZLIB): $(ZLIB_SRC)
 	 CHOST=arm-none-eabi ./configure --static --prefix=$(PORTLIBS)
 	@$(MAKE) -C $(ZLIB_VERSION)
 
-install-zlib: 
+# Downloads
+$(ZLIB_SRC):
+	wget -O $@ $(ZLIB_DOWNLOAD)
+
+$(FREETYPE_SRC):
+	wget -O $@ $(FREETYPE_DOWNLOAD)
+
+$(LIBEXIF_SRC):
+	wget -O $@ $(LIBEXIF_DOWNLOAD)
+
+$(LIBJPEGTURBO_SRC):
+	wget -O $@ $(LIBJPEGTURBO_DOWNLOAD)
+
+$(LIBPNG_SRC):
+	wget -O $@ $(LIBPNG_DOWNLOAD)
+
+$(SQLITE_SRC):
+	wget -O $@ $(SQLITE_DOWNLOAD)
+
+install-zlib:
 	@$(MAKE) -C $(ZLIB_VERSION) install
 
 install:
