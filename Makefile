@@ -56,39 +56,39 @@ old_all:
 	@echo "  $(ZLIB)"
 
 $(FREETYPE): $(FREETYPE_SRC)
-	@[ -d $(FREETYPE_VERSION) ] || tar -xaf $<
+	@[ -d $(FREETYPE_VERSION) ] || tar -xf $<
 	@cd $(FREETYPE_VERSION) && \
 	 ./configure --prefix=$(PORTLIBS) --host=arm-none-eabi --disable-shared --enable-static --without-harfbuzz
 	@$(MAKE) -C $(FREETYPE_VERSION)
 
 $(LIBEXIF): $(LIBEXIF_SRC)
-	@[ -d $(LIBEXIF_VERSION) ] || tar -xaf $<
+	@[ -d $(LIBEXIF_VERSION) ] || tar -xf $<
 	@cd $(LIBEXIF_VERSION) && \
 	 ./configure --prefix=$(PORTLIBS) --host=arm-none-eabi --disable-shared --enable-static
 	@$(MAKE) -C $(LIBEXIF_VERSION)
 
 $(LIBJPEGTURBO): $(LIBJPEGTURBO_SRC)
-	@[ -d $(LIBJPEGTURBO_VERSION) ] || tar -xaf $<
+	@[ -d $(LIBJPEGTURBO_VERSION) ] || tar -xf $<
 	@cd $(LIBJPEGTURBO_VERSION) && \
 	 ./configure --prefix=$(PORTLIBS) --host=arm-none-eabi --disable-shared --enable-static
 	@$(MAKE) CFLAGS+="\"-Drandom()=rand()\"" -C $(LIBJPEGTURBO_VERSION)
 
 $(LIBPNG): $(LIBPNG_SRC)
-	@[ -d $(LIBPNG_VERSION) ] || tar -xaf $<
+	@[ -d $(LIBPNG_VERSION) ] || tar -xf $<
 	@cd $(LIBPNG_VERSION) && \
 	 ./configure --prefix=$(PORTLIBS) --host=arm-none-eabi --disable-shared --enable-static
 	@$(MAKE) -C $(LIBPNG_VERSION)
 
 # sqlite won't work with -ffast-math
 $(SQLITE): $(SQLITE_SRC)
-	@[ -d $(SQLITE_VERSION) ] || tar -xaf $<
+	@[ -d $(SQLITE_VERSION) ] || tar -xf $<
 	@cd $(SQLITE_VERSION) && \
 	 CFLAGS="$(filter-out -ffast-math,$(CFLAGS)) -DSQLITE_OS_OTHER=1" ./configure --disable-shared --disable-threadsafe --disable-dynamic-extensions --host=arm-none-eabi --prefix=$(PORTLIBS)
 	# avoid building sqlite3 shell
 	@$(MAKE) -C $(SQLITE_VERSION) libsqlite3.la
 
 $(ZLIB): $(ZLIB_SRC)
-	@[ -d $(ZLIB_VERSION) ] || tar -xaf $<
+	@[ -d $(ZLIB_VERSION) ] || tar -xf $<
 	@cd $(ZLIB_VERSION) && \
 	 CHOST=arm-none-eabi ./configure --static --prefix=$(PORTLIBS)
 	@$(MAKE) -C $(ZLIB_VERSION)
