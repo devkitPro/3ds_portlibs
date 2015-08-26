@@ -14,9 +14,9 @@ LIBJPEGTURBO_SRC     := $(LIBJPEGTURBO_VERSION).tar.gz
 LIBJPEGTURBO_DOWNLOAD := "http://sourceforge.net/projects/libjpeg-turbo/files/1.4.1/libjpeg-turbo-1.4.1.tar.gz"
 
 LIBPNG               := libpng
-LIBPNG_VERSION       := $(LIBPNG)-1.6.17
+LIBPNG_VERSION       := $(LIBPNG)-1.6.18
 LIBPNG_SRC           := $(LIBPNG_VERSION).tar.xz
-LIBPNG_DOWNLOAD      := "http://prdownloads.sourceforge.net/libpng/libpng-1.6.17.tar.xz"
+LIBPNG_DOWNLOAD      := "http://prdownloads.sourceforge.net/libpng/libpng-1.6.18.tar.xz"
 
 SQLITE               := sqlite
 SQLITE_VERSION       := $(SQLITE)-autoconf-3081002
