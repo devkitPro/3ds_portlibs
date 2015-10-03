@@ -1,3 +1,8 @@
+LIBCONFIG		:= libconfig
+LIBCONFIG_VERSION	:= $(LIBCONFIG)-1.5
+LIBCONFIG_SRC		:= $(LIBCONFIG_VERSION).tar.gz
+LIBCONFIG_DOWNLOAD	:= "http://www.hyperrealm.com/libconfig/libconfig-1.5.tar.gz"
+
 FREETYPE             := freetype
 FREETYPE_VERSION     := $(FREETYPE)-2.6
 FREETYPE_SRC         := $(FREETYPE_VERSION).tar.bz2
@@ -37,23 +42,31 @@ export CPPFLAGS        := -I$(PORTLIBS)/include
 export LDFLAGS         := -L$(PORTLIBS)/lib
 
 .PHONY: all old_all install install-zlib clean \
+	$(LIBCONFIG) \
         $(FREETYPE) \
         $(LIBEXIF) \
         $(LIBJPEGTURBO) \
         $(LIBPNG) \
         $(SQLITE) \
         $(ZLIB)
-all: zlib install-zlib freetype libexif libjpeg-turbo libpng sqlite install
+all: zlib install-zlib libconfig install-libconfig freetype libexif libjpeg-turbo libpng sqlite install
 	@echo "Finished!"
 
 old_all:
 	@echo "Please choose one of the following targets:"
+	@echo "  $(LIBCONFIG)"
 	@echo "  $(FREETYPE) (requires zlib to be installed)"
 	@echo "  $(LIBEXIF)"
 	@echo "  $(LIBJPEGTURBO)"
 	@echo "  $(LIBPNG) (requires zlib to be installed)"
 	@echo "  $(SQLITE)"
 	@echo "  $(ZLIB)"
+
+$(LIBCONFIG): $(LIBCONFIG_SRC)
+	@[ -d $(LIBCONFIG_VERSION) ] || tar -xf $<
+	@cd $(LIBCONFIG_VERSION) && \
+	 ./configure --prefix=$(PORTLIBS) --host=arm-none-eabi --disable-cxx --disable-examples
+	@$(MAKE) -C $(LIBCONFIG_VERSION)
 
 $(FREETYPE): $(FREETYPE_SRC)
 	@[ -d $(FREETYPE_VERSION) ] || tar -xf $<
@@ -94,6 +107,9 @@ $(ZLIB): $(ZLIB_SRC)
 	@$(MAKE) -C $(ZLIB_VERSION)
 
 # Downloads
+$(LIBCONFIG_SRC):
+	wget -O $@ $(LIBCONFIG_DOWNLOAD)
+
 $(ZLIB_SRC):
 	wget -O $@ $(ZLIB_DOWNLOAD)
 
@@ -115,7 +131,11 @@ $(SQLITE_SRC):
 install-zlib:
 	@$(MAKE) -C $(ZLIB_VERSION) install
 
+install-libconfig:
+	@$(MAKE) -C $(LIBCONFIG_VERSION) install
+
 install:
+	@[ ! -d $(LIBCONFIG_VERSION) ] || $(MAKE) -C $(LIBCONFIG_VERSION) install
 	@[ ! -d $(FREETYPE_VERSION) ] || $(MAKE) -C $(FREETYPE_VERSION) install
 	@[ ! -d $(LIBEXIF_VERSION) ] || $(MAKE) -C $(LIBEXIF_VERSION) install
 	@[ ! -d $(LIBJPEGTURBO_VERSION) ] || $(MAKE) -C $(LIBJPEGTURBO_VERSION) install
@@ -123,6 +143,7 @@ install:
 	@[ ! -d $(SQLITE_VERSION) ] || $(MAKE) -C $(SQLITE_VERSION) install-libLTLIBRARIES install-data
 
 clean:
+	@$(RM) -r $(LIBCONFIG_VERSION)
 	@$(RM) -r $(FREETYPE_VERSION)
 	@$(RM) -r $(LIBEXIF_VERSION)
 	@$(RM) -r $(LIBJPEGTURBO_VERSION)
