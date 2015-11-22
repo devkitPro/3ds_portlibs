@@ -16,7 +16,7 @@ LIBEXIF_DOWNLOAD     := "http://sourceforge.net/projects/libexif/files/libexif/0
 LIBJPEGTURBO         := libjpeg-turbo
 LIBJPEGTURBO_VERSION := $(LIBJPEGTURBO)-1.4.2
 LIBJPEGTURBO_SRC     := $(LIBJPEGTURBO_VERSION).tar.gz
-LIBJPEGTURBO_DOWNLOAD := "http://sourceforge.net/projects/libjpeg-turbo/files/1.4.1/libjpeg-turbo-1.4.2.tar.gz"
+LIBJPEGTURBO_DOWNLOAD := "http://sourceforge.net/projects/libjpeg-turbo/files/1.4.2/libjpeg-turbo-1.4.2.tar.gz"
 
 LIBPNG               := libpng
 LIBPNG_VERSION       := $(LIBPNG)-1.6.19
