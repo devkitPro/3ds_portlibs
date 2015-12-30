@@ -15,7 +15,7 @@ LIBPNG_VERSION       := $(LIBPNG)-1.6.20
 LIBPNG_SRC           := $(LIBPNG_VERSION).tar.xz
 
 SQLITE               := sqlite
-SQLITE_VERSION       := $(SQLITE)-autoconf-3080704
+SQLITE_VERSION       := $(SQLITE)-autoconf-3090200
 SQLITE_SRC           := $(SQLITE_VERSION).tar.gz
 
 ZLIB                 := zlib
