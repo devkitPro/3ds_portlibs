@@ -1,5 +1,5 @@
 FREETYPE             := freetype
-FREETYPE_VERSION     := $(FREETYPE)-2.5.4
+FREETYPE_VERSION     := $(FREETYPE)-2.6.2
 FREETYPE_SRC         := $(FREETYPE_VERSION).tar.bz2
 
 LIBEXIF              := libexif
