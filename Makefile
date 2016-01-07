@@ -105,6 +105,7 @@ install:
 	@[ ! -d $(LIBJPEGTURBO_VERSION) ] || $(MAKE) -C $(LIBJPEGTURBO_VERSION) install
 	@[ ! -d $(LIBPNG_VERSION) ] || $(MAKE) -C $(LIBPNG_VERSION) install
 	@[ ! -d $(SQLITE_VERSION) ] || $(MAKE) -C $(SQLITE_VERSION) install-libLTLIBRARIES install-data
+	@[ ! -d $(LIBXMP_LITE_VERSION) ] || $(MAKE) -C $(LIBXMP_LITE_VERSION) install
 
 clean:
 	@$(RM) -r $(FREETYPE_VERSION)
@@ -113,3 +114,4 @@ clean:
 	@$(RM) -r $(LIBPNG_VERSION)
 	@$(RM) -r $(SQLITE_VERSION)
 	@$(RM) -r $(ZLIB_VERSION)
+	@$(RM) -r $(LIBXMP_LITE_VERSION)
