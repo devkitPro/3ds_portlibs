@@ -18,6 +18,10 @@ SQLITE               := sqlite
 SQLITE_VERSION       := $(SQLITE)-autoconf-3090200
 SQLITE_SRC           := $(SQLITE_VERSION).tar.gz
 
+LIBXMP_LITE	         := libxmp-lite
+LIBXMP_LITE_VERSION  := $(LIBXMP_LITE)-4.3.10
+LIBXMP_LITE_SRC	     := $(LIBXMP_LITE_VERSION).tar.gz
+
 ZLIB                 := zlib
 ZLIB_VERSION         := $(ZLIB)-1.2.8
 ZLIB_SRC             := $(ZLIB_VERSION).tar.gz
@@ -35,6 +39,7 @@ export LDFLAGS         := -L$(PORTLIBS)/lib
         $(LIBJPEGTURBO) \
         $(LIBPNG) \
         $(SQLITE) \
+        $(LIBXMP_LITE) \
         $(ZLIB)
 
 all:
@@ -44,6 +49,7 @@ all:
 	@echo "  $(LIBJPEGTURBO)"
 	@echo "  $(LIBPNG) (requires zlib to be installed)"
 	@echo "  $(SQLITE)"
+	@echo "  $(LIBXMP_LITE)"
 	@echo "  $(ZLIB)"
 
 $(FREETYPE): $(FREETYPE_SRC)
@@ -77,6 +83,12 @@ $(SQLITE): $(SQLITE_SRC)
 	 CFLAGS="$(filter-out -ffast-math,$(CFLAGS)) -DSQLITE_OS_OTHER=1" ./configure --disable-shared --disable-threadsafe --disable-dynamic-extensions --host=arm-none-eabi --prefix=$(PORTLIBS)
 	# avoid building sqlite3 shell
 	@$(MAKE) -C $(SQLITE_VERSION) libsqlite3.la
+
+$(LIBXMP_LITE): $(LIBXMP_LITE_SRC)
+	@[ -d $(LIBXMP_LITE_VERSION) ] || tar -xaf $<
+	@cd $(LIBXMP_LITE_VERSION) && \
+	 ./configure --prefix=$(PORTLIBS) --host=arm-none-eabi --disable-shared --enable-static
+	@$(MAKE) -C $(LIBXMP_LITE_VERSION)
 
 $(ZLIB): $(ZLIB_SRC)
 	@[ -d $(ZLIB_VERSION) ] || tar -xaf $<
