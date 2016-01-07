@@ -1,3 +1,11 @@
+ifeq ($(strip $(DEVKITPRO)),)
+$(error "Please set DEVKITPRO in your environment. export DEVKITPRO=<path to>devkitARM")
+endif
+
+ifeq ($(strip $(DEVKITARM)),)
+$(error "Please set DEVKITARM in your environment. export DEVKITARM=<path to>devkitARM")
+endif
+
 LIBCONFIG            := libconfig
 LIBCONFIG_VERSION    := $(LIBCONFIG)-1.5
 LIBCONFIG_SRC        := $(LIBCONFIG_VERSION).tar.gz
