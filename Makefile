@@ -66,7 +66,7 @@ $(LIBJPEGTURBO): $(LIBJPEGTURBO_SRC)
 	@$(MAKE) CFLAGS+="\"-Drandom()=rand()\"" -C $(LIBJPEGTURBO_VERSION)
 
 $(LIBPNG): $(LIBPNG_SRC)
-	@[ -d $(LIBPNG_VERSION) ] || tar -xaf $<
+	@[ -d $(LIBPNG_VERSION) ] || tar -xJf $<
 	@cd $(LIBPNG_VERSION) && \
 	 ./configure --prefix=$(PORTLIBS) --host=arm-none-eabi --disable-shared --enable-static
 	@$(MAKE) -C $(LIBPNG_VERSION)
