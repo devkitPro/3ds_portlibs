@@ -48,13 +48,13 @@ all:
 	@echo "  $(ZLIB)"
 
 $(FREETYPE): $(FREETYPE_SRC)
-	@[ -d $(FREETYPE_VERSION) ] || tar -xaf $<
+	@[ -d $(FREETYPE_VERSION) ] || tar -jxf $<
 	@cd $(FREETYPE_VERSION) && \
 	 ./configure --prefix=$(PORTLIBS) --host=arm-none-eabi --disable-shared --enable-static
 	@$(MAKE) -C $(FREETYPE_VERSION)
 
 $(LIBEXIF): $(LIBEXIF_SRC)
-	@[ -d $(LIBEXIF_VERSION) ] || tar -xaf $<
+	@[ -d $(LIBEXIF_VERSION) ] || tar -jxf $<
 	@cd $(LIBEXIF_VERSION) && \
 	 ./configure --prefix=$(PORTLIBS) --host=arm-none-eabi --disable-shared --enable-static
 	@$(MAKE) -C $(LIBEXIF_VERSION)
