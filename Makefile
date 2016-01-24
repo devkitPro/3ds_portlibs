@@ -26,12 +26,12 @@ ZLIB                 := zlib
 ZLIB_VERSION         := $(ZLIB)-1.2.8
 ZLIB_SRC             := $(ZLIB_VERSION).tar.gz
 
-export PORTLIBS        := $(DEVKITPRO)/portlibs/armv6k
-export PATH            := $(DEVKITARM)/bin:$(PORTLIBS)/bin:$(PATH)
-export PKG_CONFIG_PATH := $(PORTLIBS)/lib/pkgconfig
-export CFLAGS          := -march=armv6k -mtune=mpcore -mfloat-abi=hard -O3 -mword-relocations
-export CPPFLAGS        := -I$(PORTLIBS)/include
-export LDFLAGS         := -L$(PORTLIBS)/lib
+export PATH          := $(DEVKITARM)/bin:$(DEVKITPRO)/portlibs/3ds/bin:$(DEVKITPRO)/portlibs/armv6k/bin:$(PATH)
+export PKG_CONFIG    := $(PWD)/arm-none-eabi-pkg-config
+
+export CFLAGS        := -march=armv6k -mtune=mpcore -mfloat-abi=hard -O3 -mword-relocations
+export CPPFLAGS      := -I$(PORTLIBS)/include
+export LDFLAGS       := -L$(PORTLIBS)/lib
 
 .PHONY: all install install-zlib clean \
         $(FREETYPE) \
