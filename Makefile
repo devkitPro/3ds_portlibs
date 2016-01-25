@@ -1,48 +1,57 @@
-FREETYPE             := freetype
-FREETYPE_VERSION     := $(FREETYPE)-2.6.2
-FREETYPE_SRC         := $(FREETYPE_VERSION).tar.bz2
+FREETYPE              := freetype
+FREETYPE_VERSION      := $(FREETYPE)-2.6.2
+FREETYPE_SRC          := $(FREETYPE_VERSION).tar.bz2
+FREETYPE_DOWNLOAD     := http://download.savannah.gnu.org/releases/freetype/freetype-2.6.2.tar.bz2
 
-JANSSON              := jansson
-JANSSON_VERSION      := $(JANSSON)-2.7
-JANSSON_SRC          := $(JANSSON_VERSION).tar.gz
+JANSSON               := jansson
+JANSSON_VERSION       := $(JANSSON)-2.7
+JANSSON_SRC           := $(JANSSON_VERSION).tar.gz
+JANSSON_DOWNLOAD      := https://github.com/akheron/jansson/archive/v2.7.tar.gz
 
-LIBEXIF              := libexif
-LIBEXIF_VERSION      := $(LIBEXIF)-0.6.21
-LIBEXIF_SRC          := $(LIBEXIF_VERSION).tar.bz2
+LIBEXIF               := libexif
+LIBEXIF_VERSION       := $(LIBEXIF)-0.6.21
+LIBEXIF_SRC           := $(LIBEXIF_VERSION).tar.bz2
+LIBEXIF_DOWNLOAD      := http://sourceforge.net/projects/libexif/files/libexif/0.6.21/libexif-0.6.21.tar.bz2/download
 
-LIBJPEGTURBO         := libjpeg-turbo
-LIBJPEGTURBO_VERSION := $(LIBJPEGTURBO)-1.4.2
-LIBJPEGTURBO_SRC     := $(LIBJPEGTURBO_VERSION).tar.gz
+LIBJPEGTURBO          := libjpeg-turbo
+LIBJPEGTURBO_VERSION  := $(LIBJPEGTURBO)-1.4.2
+LIBJPEGTURBO_SRC      := $(LIBJPEGTURBO_VERSION).tar.gz
+LIBJPEGTURBO_DOWNLOAD := http://sourceforge.net/projects/libjpeg-turbo/files/1.4.2/libjpeg-turbo-1.4.2.tar.gz/download
 
-LIBPNG               := libpng
-LIBPNG_VERSION       := $(LIBPNG)-1.6.21
-LIBPNG_SRC           := $(LIBPNG_VERSION).tar.xz
+LIBPNG                := libpng
+LIBPNG_VERSION        := $(LIBPNG)-1.6.21
+LIBPNG_SRC            := $(LIBPNG_VERSION).tar.xz
+LIBPNG_DOWNLOAD       := http://prdownloads.sourceforge.net/libpng/libpng-1.6.21.tar.xz?download
 
-LIBXMP_LITE          := libxmp-lite
-LIBXMP_LITE_VERSION  := $(LIBXMP_LITE)-4.3.10
-LIBXMP_LITE_SRC      := $(LIBXMP_LITE_VERSION).tar.gz
+LIBXMP_LITE           := libxmp-lite
+LIBXMP_LITE_VERSION   := $(LIBXMP_LITE)-4.3.10
+LIBXMP_LITE_SRC       := $(LIBXMP_LITE_VERSION).tar.gz
+LIBXMP_LITE_DOWNLOAD  := http://sourceforge.net/projects/xmp/files/libxmp/4.3.10/libxmp-lite-4.3.10.tar.gz/download
 
-SQLITE               := sqlite
-SQLITE_VERSION       := $(SQLITE)-autoconf-3100200
-SQLITE_SRC           := $(SQLITE_VERSION).tar.gz
+SQLITE                := sqlite
+SQLITE_VERSION        := $(SQLITE)-autoconf-3100200
+SQLITE_SRC            := $(SQLITE_VERSION).tar.gz
+SQLITE_DOWNLOAD       := https://www.sqlite.org/2016/sqlite-autoconf-3100200.tar.gz
 
-TINYXML              := tinyxml2
-TINYXML_VERSION      := $(TINYXML)-3.0.0
-TINYXML_SRC          := $(TINYXML_VERSION).tar.gz
+TINYXML               := tinyxml2
+TINYXML_VERSION       := $(TINYXML)-3.0.0
+TINYXML_SRC           := $(TINYXML_VERSION).tar.gz
+TINYXML_DOWNLOAD      := https://github.com/leethomason/tinyxml2/archive/3.0.0.tar.gz
 
-ZLIB                 := zlib
-ZLIB_VERSION         := $(ZLIB)-1.2.8
-ZLIB_SRC             := $(ZLIB_VERSION).tar.gz
+ZLIB                  := zlib
+ZLIB_VERSION          := $(ZLIB)-1.2.8
+ZLIB_SRC              := $(ZLIB_VERSION).tar.gz
+ZLIB_DOWNLOAD         := http://prdownloads.sourceforge.net/libpng/zlib-1.2.8.tar.gz?download
 
-export PORTLIBS_PATH := $(DEVKITPRO)/portlibs
-export PATH          := $(DEVKITARM)/bin:$(PORTLIBS_PATH)/3ds/bin:$(PORTLIBS_PATH)/armv6k/bin:$(PATH)
-export PKG_CONFIG    := $(PWD)/arm-none-eabi-pkg-config
+export PORTLIBS_PATH  := $(DEVKITPRO)/portlibs
+export PATH           := $(DEVKITARM)/bin:$(PORTLIBS_PATH)/3ds/bin:$(PORTLIBS_PATH)/armv6k/bin:$(PATH)
+export PKG_CONFIG     := $(PWD)/arm-none-eabi-pkg-config
 
-export CFLAGS        := -march=armv6k -mtune=mpcore -mfloat-abi=hard -mtp=soft -O3 -mword-relocations
-export CPPFLAGS      := -I$(PORTLIBS_PATH)/armv6k/include
-export LDFLAGS       := -L$(PORTLIBS_PATH)/armv6k/lib
+export CFLAGS         := -march=armv6k -mtune=mpcore -mfloat-abi=hard -mtp=soft -O3 -mword-relocations
+export CPPFLAGS       := -I$(PORTLIBS_PATH)/armv6k/include
+export LDFLAGS        := -L$(PORTLIBS_PATH)/armv6k/lib
 
-.PHONY: all install install-zlib clean \
+.PHONY: all install install-zlib clean download \
         $(FREETYPE) \
         $(JANSSON) \
         $(LIBEXIF) \
@@ -50,7 +59,7 @@ export LDFLAGS       := -L$(PORTLIBS_PATH)/armv6k/lib
         $(LIBPNG) \
         $(LIBXMP_LITE) \
         $(SQLITE) \
-	$(TINYXML) \
+        $(TINYXML) \
         $(ZLIB)
 
 all:
@@ -64,6 +73,37 @@ all:
 	@echo "  $(SQLITE)"
 	@echo "  $(TINYXML)"
 	@echo "  $(ZLIB)"
+
+download: $(FREETYPE_SRC) $(JANSSON_SRC) $(LIBEXIF_SRC) $(LIBJPEGTURBO_SRC) $(LIBPNG_SRC) $(LIBXMP_LITE_SRC) $(SQLITE_SRC) $(TINYXML_SRC) $(ZLIB_SRC)
+
+DOWNLOAD = wget -O "$(1)" "$(2)" || curl -o "$(1)" "$(2)"
+
+$(FREETYPE_SRC):
+	$(call DOWNLOAD,$@,$(FREETYPE_DOWNLOAD))
+
+$(JANSSON_SRC):
+	@$(call DOWNLOAD,$@,$(JANSSON_DOWNLOAD))
+
+$(LIBEXIF_SRC):
+	@$(call DOWNLOAD,$@,$(LIBEXIF_DOWNLOAD))
+
+$(LIBJPEGTURBO_SRC):
+	@$(call DOWNLOAD,$@,$(LIBJPEGTURBO_DOWNLOAD))
+
+$(LIBPNG_SRC):
+	@$(call DOWNLOAD,$@,$(LIBPNG_DOWNLOAD))
+
+$(LIBXMP_LITE_SRC):
+	@$(call DOWNLOAD,$@,$(LIBXMP_DOWNLOAD))
+
+$(SQLITE_SRC):
+	@$(call DOWNLOAD,$@,$(SQLITE_DOWNLOAD))
+
+$(TINYXML_SRC):
+	@$(call DOWNLOAD,$@,$(TINYXML_DOWNLOAD))
+
+$(ZLIB_SRC):
+	@$(call DOWNLOAD,$@,$(ZLIB_DOWNLOAD))
 
 $(FREETYPE): $(FREETYPE_SRC)
 	@[ -d $(FREETYPE_VERSION) ] || tar -xjf $<
