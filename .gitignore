@@ -1,7 +1,9 @@
 freetype-*
+jansson-*
 libexif-*
 libjpeg-*
 libpng-*
-sqlite-*
-zlib-*
 libxmp-*
+sqlite-*
+tinyxml2-*
+zlib-*
