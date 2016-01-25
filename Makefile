@@ -18,9 +18,9 @@ SQLITE               := sqlite
 SQLITE_VERSION       := $(SQLITE)-autoconf-3100200
 SQLITE_SRC           := $(SQLITE_VERSION).tar.gz
 
-LIBXMP_LITE	         := libxmp-lite
+LIBXMP_LITE          := libxmp-lite
 LIBXMP_LITE_VERSION  := $(LIBXMP_LITE)-4.3.10
-LIBXMP_LITE_SRC	     := $(LIBXMP_LITE_VERSION).tar.gz
+LIBXMP_LITE_SRC      := $(LIBXMP_LITE_VERSION).tar.gz
 
 ZLIB                 := zlib
 ZLIB_VERSION         := $(ZLIB)-1.2.8
