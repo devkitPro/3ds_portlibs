@@ -2,6 +2,10 @@ FREETYPE             := freetype
 FREETYPE_VERSION     := $(FREETYPE)-2.6.2
 FREETYPE_SRC         := $(FREETYPE_VERSION).tar.bz2
 
+JANSSON              := jansson
+JANSSON_VERSION      := $(JANSSON)-2.7
+JANSSON_SRC          := $(JANSSON_VERSION).tar.gz
+
 LIBEXIF              := libexif
 LIBEXIF_VERSION      := $(LIBEXIF)-0.6.21
 LIBEXIF_SRC          := $(LIBEXIF_VERSION).tar.bz2
@@ -40,6 +44,7 @@ export LDFLAGS       := -L$(PORTLIBS_PATH)/armv6k/lib
 
 .PHONY: all install install-zlib clean \
         $(FREETYPE) \
+        $(JANSSON) \
         $(LIBEXIF) \
         $(LIBJPEGTURBO) \
         $(LIBPNG) \
@@ -51,6 +56,7 @@ export LDFLAGS       := -L$(PORTLIBS_PATH)/armv6k/lib
 all:
 	@echo "Please choose one of the following targets:"
 	@echo "  $(FREETYPE) (requires zlib to be installed)"
+	@echo "  $(JANSSON)"
 	@echo "  $(LIBEXIF)"
 	@echo "  $(LIBJPEGTURBO)"
 	@echo "  $(LIBPNG) (requires zlib to be installed)"
@@ -64,6 +70,13 @@ $(FREETYPE): $(FREETYPE_SRC)
 	@cd $(FREETYPE_VERSION) && \
 	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
 	@$(MAKE) -C $(FREETYPE_VERSION)
+
+$(JANSSON): $(JANSSON_SRC)
+	@[ -d $(JANSSON_VERSION) ] || tar -xzf $<
+	@cd $(JANSSON_VERSION) && \
+	 autoreconf -i && \
+	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
+	@$(MAKE) -C $(JANSSON_VERSION)
 
 $(LIBEXIF): $(LIBEXIF_SRC)
 	@[ -d $(LIBEXIF_VERSION) ] || tar -jxf $<
@@ -113,6 +126,7 @@ install-zlib:
 
 install:
 	@[ ! -d $(FREETYPE_VERSION) ] || $(MAKE) -C $(FREETYPE_VERSION) install
+	@[ ! -d $(JANSSON_VERSION) ] || $(MAKE) -C $(JANSSON_VERSION) install
 	@[ ! -d $(LIBEXIF_VERSION) ] || $(MAKE) -C $(LIBEXIF_VERSION) install
 	@[ ! -d $(LIBJPEGTURBO_VERSION) ] || $(MAKE) -C $(LIBJPEGTURBO_VERSION) install
 	@[ ! -d $(LIBPNG_VERSION) ] || $(MAKE) -C $(LIBPNG_VERSION) install
@@ -122,6 +136,7 @@ install:
 
 clean:
 	@$(RM) -r $(FREETYPE_VERSION)
+	@$(RM) -r $(JANSSON_VERSION)
 	@$(RM) -r $(LIBEXIF_VERSION)
 	@$(RM) -r $(LIBJPEGTURBO_VERSION)
 	@$(RM) -r $(LIBPNG_VERSION)

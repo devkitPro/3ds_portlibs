@@ -16,6 +16,7 @@ install` in order for the portlibs to be installed.
 Currently supports the following portlibs:
 
 * freetype (requires zlib)
+* jansson
 * libexif
 * libjpeg-turbo
 * libpng (requires zlib)
@@ -27,6 +28,7 @@ Currently supports the following portlibs:
 Download links:
 
 * [freetype-2.6.2.tar.bz2] (http://download.savannah.gnu.org/releases/freetype/freetype-2.6.2.tar.bz2)
+* [jansson-v2.7.tar.gz] (https://github.com/akheron/jansson/archive/v2.7.tar.gz)
 * [libexif-0.6.21.tar.bz2] (http://sourceforge.net/projects/libexif/files/libexif/0.6.21/libexif-0.6.21.tar.bz2/download)
 * [libjpeg-turbo-1.4.2.tar.gz] (http://sourceforge.net/projects/libjpeg-turbo/files/1.4.2/libjpeg-turbo-1.4.2.tar.gz/download)
 * [libpng-1.6.21.tar.xz] (http://prdownloads.sourceforge.net/libpng/libpng-1.6.21.tar.xz?download)
