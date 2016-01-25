@@ -15,7 +15,7 @@ LIBPNG_VERSION       := $(LIBPNG)-1.6.21
 LIBPNG_SRC           := $(LIBPNG_VERSION).tar.xz
 
 SQLITE               := sqlite
-SQLITE_VERSION       := $(SQLITE)-autoconf-3100000
+SQLITE_VERSION       := $(SQLITE)-autoconf-3100200
 SQLITE_SRC           := $(SQLITE_VERSION).tar.gz
 
 LIBXMP_LITE	         := libxmp-lite
