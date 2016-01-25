@@ -29,7 +29,7 @@ ZLIB_SRC             := $(ZLIB_VERSION).tar.gz
 export PATH          := $(DEVKITARM)/bin:$(DEVKITPRO)/portlibs/3ds/bin:$(DEVKITPRO)/portlibs/armv6k/bin:$(PATH)
 export PKG_CONFIG    := $(PWD)/arm-none-eabi-pkg-config
 
-export CFLAGS        := -march=armv6k -mtune=mpcore -mfloat-abi=hard -O3 -mword-relocations
+export CFLAGS        := -march=armv6k -mtune=mpcore -mfloat-abi=hard -mtp=soft -O3 -mword-relocations
 export CPPFLAGS      := -I$(PORTLIBS)/include
 export LDFLAGS       := -L$(PORTLIBS)/lib
 
