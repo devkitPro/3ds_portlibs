@@ -21,6 +21,7 @@ Currently supports the following portlibs:
 * libpng (requires zlib)
 * libxmp-lite
 * sqlite
+* tinyxml2
 * zlib
 
 Download links:
@@ -31,4 +32,5 @@ Download links:
 * [libpng-1.6.21.tar.xz] (http://prdownloads.sourceforge.net/libpng/libpng-1.6.21.tar.xz?download)
 * [libxmp-lite-4.3.10.tar.gz](http://sourceforge.net/projects/xmp/files/libxmp/4.3.10/libxmp-lite-4.3.10.tar.gz/download)
 * [sqlite-autoconf-3100200.tar.gz] (https://www.sqlite.org/2016/sqlite-autoconf-3100200.tar.gz)
+* [tinyxml2-3.0.0.tar.gz] (https://github.com/leethomason/tinyxml2/archive/3.0.0.tar.gz)
 * [zlib-1.2.8.tar.gz] (http://prdownloads.sourceforge.net/libpng/zlib-1.2.8.tar.gz?download)

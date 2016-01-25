@@ -22,6 +22,10 @@ SQLITE               := sqlite
 SQLITE_VERSION       := $(SQLITE)-autoconf-3100200
 SQLITE_SRC           := $(SQLITE_VERSION).tar.gz
 
+TINYXML              := tinyxml2
+TINYXML_VERSION      := $(TINYXML)-3.0.0
+TINYXML_SRC          := $(TINYXML_VERSION).tar.gz
+
 ZLIB                 := zlib
 ZLIB_VERSION         := $(ZLIB)-1.2.8
 ZLIB_SRC             := $(ZLIB_VERSION).tar.gz
@@ -41,6 +45,7 @@ export LDFLAGS       := -L$(PORTLIBS_PATH)/armv6k/lib
         $(LIBPNG) \
         $(LIBXMP_LITE) \
         $(SQLITE) \
+	$(TINYXML) \
         $(ZLIB)
 
 all:
@@ -51,6 +56,7 @@ all:
 	@echo "  $(LIBPNG) (requires zlib to be installed)"
 	@echo "  $(LIBXMP_LITE)"
 	@echo "  $(SQLITE)"
+	@echo "  $(TINYXML)"
 	@echo "  $(ZLIB)"
 
 $(FREETYPE): $(FREETYPE_SRC)
@@ -91,6 +97,11 @@ $(SQLITE): $(SQLITE_SRC)
 	# avoid building sqlite3 shell
 	@$(MAKE) -C $(SQLITE_VERSION) libsqlite3.la
 
+# tinyxml2 uses cmake
+$(TINYXML): $(TINYXML_SRC)
+	@[ -d $(TINYXML_VERSION) ] || tar -xzf $<
+	@cd $(TINYXML_VERSION) && cmake -DCMAKE_SYSTEM_NAME=Generic -DCMAKE_C_COMPILER=$(DEVKITARM)/bin/arm-none-eabi-gcc -DCMAKE_CXX_COMPILER=$(DEVKITARM)/bin/arm-none-eabi-g++ -DCMAKE_INSTALL_PREFIX=$(PORTLIBS_PATH)/armv6k .
+
 $(ZLIB): $(ZLIB_SRC)
 	@[ -d $(ZLIB_VERSION) ] || tar -xaf $<
 	@cd $(ZLIB_VERSION) && \
@@ -107,6 +118,7 @@ install:
 	@[ ! -d $(LIBPNG_VERSION) ] || $(MAKE) -C $(LIBPNG_VERSION) install
 	@[ ! -d $(LIBXMP_LITE_VERSION) ] || $(MAKE) -C $(LIBXMP_LITE_VERSION) install
 	@[ ! -d $(SQLITE_VERSION) ] || $(MAKE) -C $(SQLITE_VERSION) install-libLTLIBRARIES install-data
+	@[ ! -d $(TINYXML_VERSION) ] || $(MAKE) -C $(TINYXML_VERSION) install
 
 clean:
 	@$(RM) -r $(FREETYPE_VERSION)
@@ -115,4 +127,5 @@ clean:
 	@$(RM) -r $(LIBPNG_VERSION)
 	@$(RM) -r $(LIBXMP_LITE_VERSION)
 	@$(RM) -r $(SQLITE_VERSION)
+	@$(RM) -r $(TINYXML_VERSION)
 	@$(RM) -r $(ZLIB_VERSION)
