@@ -11,7 +11,7 @@ LIBJPEGTURBO_VERSION := $(LIBJPEGTURBO)-1.4.2
 LIBJPEGTURBO_SRC     := $(LIBJPEGTURBO_VERSION).tar.gz
 
 LIBPNG               := libpng
-LIBPNG_VERSION       := $(LIBPNG)-1.6.20
+LIBPNG_VERSION       := $(LIBPNG)-1.6.21
 LIBPNG_SRC           := $(LIBPNG_VERSION).tar.xz
 
 SQLITE               := sqlite

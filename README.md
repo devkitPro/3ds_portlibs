@@ -28,7 +28,7 @@ Download links:
 * [freetype-2.6.2.tar.bz2] (http://download.savannah.gnu.org/releases/freetype/freetype-2.6.2.tar.bz2)
 * [libexif-0.6.21.tar.bz2] (http://sourceforge.net/projects/libexif/files/libexif/0.6.21/libexif-0.6.21.tar.bz2/download)
 * [libjpeg-turbo-1.4.2.tar.gz] (http://sourceforge.net/projects/libjpeg-turbo/files/1.3.1/libjpeg-turbo-1.4.2.tar.gz/download)
-* [libpng-1.6.20.tar.xz] (http://prdownloads.sourceforge.net/libpng/libpng-1.6.20.tar.xz?download)
+* [libpng-1.6.21.tar.xz] (http://prdownloads.sourceforge.net/libpng/libpng-1.6.21.tar.xz?download)
 * [sqlite-autoconf-3090200.tar.gz] (https://www.sqlite.org/2016/sqlite-autoconf-3100000.tar.gz)
 * [libxmp-lite-4.3.10.tar.gz](http://sourceforge.net/projects/xmp/files/libxmp/4.3.10/libxmp-lite-4.3.10.tar.gz/download)
 * [zlib-1.2.8.tar.gz] (http://prdownloads.sourceforge.net/libpng/zlib-1.2.8.tar.gz?download)
