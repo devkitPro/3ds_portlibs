@@ -1,5 +1,5 @@
 FREETYPE             := freetype
-FREETYPE_VERSION     := $(FREETYPE)-2.5.4
+FREETYPE_VERSION     := $(FREETYPE)-2.6.2
 FREETYPE_SRC         := $(FREETYPE_VERSION).tar.bz2
 
 LIBEXIF              := libexif
@@ -7,28 +7,31 @@ LIBEXIF_VERSION      := $(LIBEXIF)-0.6.21
 LIBEXIF_SRC          := $(LIBEXIF_VERSION).tar.bz2
 
 LIBJPEGTURBO         := libjpeg-turbo
-LIBJPEGTURBO_VERSION := $(LIBJPEGTURBO)-1.3.1
+LIBJPEGTURBO_VERSION := $(LIBJPEGTURBO)-1.4.2
 LIBJPEGTURBO_SRC     := $(LIBJPEGTURBO_VERSION).tar.gz
 
 LIBPNG               := libpng
-LIBPNG_VERSION       := $(LIBPNG)-1.6.15
+LIBPNG_VERSION       := $(LIBPNG)-1.6.20
 LIBPNG_SRC           := $(LIBPNG_VERSION).tar.xz
 
 SQLITE               := sqlite
-SQLITE_VERSION       := $(SQLITE)-autoconf-3080704
+SQLITE_VERSION       := $(SQLITE)-autoconf-3100000
 SQLITE_SRC           := $(SQLITE_VERSION).tar.gz
+
+LIBXMP_LITE	         := libxmp-lite
+LIBXMP_LITE_VERSION  := $(LIBXMP_LITE)-4.3.10
+LIBXMP_LITE_SRC	     := $(LIBXMP_LITE_VERSION).tar.gz
 
 ZLIB                 := zlib
 ZLIB_VERSION         := $(ZLIB)-1.2.8
 ZLIB_SRC             := $(ZLIB_VERSION).tar.gz
 
-export PORTLIBS        := $(DEVKITPRO)/portlibs/armv6k
-export PATH            := $(DEVKITARM)/bin:$(PATH)
-export PKG_CONFIG_PATH := $(PORTLIBS)/lib/pkgconfig
-export CFLAGS          := -march=armv6k -mtune=mpcore -mfloat-abi=softfp -O3 \
-                          -mword-relocations -fomit-frame-pointer -ffast-math
-export CPPFLAGS        := -I$(PORTLIBS)/include
-export LDFLAGS         := -L$(PORTLIBS)/lib
+export PATH          := $(DEVKITARM)/bin:$(DEVKITPRO)/portlibs/3ds/bin:$(DEVKITPRO)/portlibs/armv6k/bin:$(PATH)
+export PKG_CONFIG    := $(PWD)/arm-none-eabi-pkg-config
+
+export CFLAGS        := -march=armv6k -mtune=mpcore -mfloat-abi=hard -O3 -mword-relocations
+export CPPFLAGS      := -I$(PORTLIBS)/include
+export LDFLAGS       := -L$(PORTLIBS)/lib
 
 .PHONY: all install install-zlib clean \
         $(FREETYPE) \
@@ -36,6 +39,7 @@ export LDFLAGS         := -L$(PORTLIBS)/lib
         $(LIBJPEGTURBO) \
         $(LIBPNG) \
         $(SQLITE) \
+        $(LIBXMP_LITE) \
         $(ZLIB)
 
 all:
@@ -45,6 +49,7 @@ all:
 	@echo "  $(LIBJPEGTURBO)"
 	@echo "  $(LIBPNG) (requires zlib to be installed)"
 	@echo "  $(SQLITE)"
+	@echo "  $(LIBXMP_LITE)"
 	@echo "  $(ZLIB)"
 
 $(FREETYPE): $(FREETYPE_SRC)
@@ -79,6 +84,12 @@ $(SQLITE): $(SQLITE_SRC)
 	# avoid building sqlite3 shell
 	@$(MAKE) -C $(SQLITE_VERSION) libsqlite3.la
 
+$(LIBXMP_LITE): $(LIBXMP_LITE_SRC)
+	@[ -d $(LIBXMP_LITE_VERSION) ] || tar -xaf $<
+	@cd $(LIBXMP_LITE_VERSION) && \
+	 ./configure --prefix=$(PORTLIBS) --host=arm-none-eabi --disable-shared --enable-static
+	@$(MAKE) -C $(LIBXMP_LITE_VERSION)
+
 $(ZLIB): $(ZLIB_SRC)
 	@[ -d $(ZLIB_VERSION) ] || tar -xaf $<
 	@cd $(ZLIB_VERSION) && \
@@ -94,6 +105,7 @@ install:
 	@[ ! -d $(LIBJPEGTURBO_VERSION) ] || $(MAKE) -C $(LIBJPEGTURBO_VERSION) install
 	@[ ! -d $(LIBPNG_VERSION) ] || $(MAKE) -C $(LIBPNG_VERSION) install
 	@[ ! -d $(SQLITE_VERSION) ] || $(MAKE) -C $(SQLITE_VERSION) install-libLTLIBRARIES install-data
+	@[ ! -d $(LIBXMP_LITE_VERSION) ] || $(MAKE) -C $(LIBXMP_LITE_VERSION) install
 
 clean:
 	@$(RM) -r $(FREETYPE_VERSION)
@@ -102,3 +114,4 @@ clean:
 	@$(RM) -r $(LIBPNG_VERSION)
 	@$(RM) -r $(SQLITE_VERSION)
 	@$(RM) -r $(ZLIB_VERSION)
+	@$(RM) -r $(LIBXMP_LITE_VERSION)
