@@ -30,7 +30,7 @@ ZLIB                 := zlib
 ZLIB_VERSION         := $(ZLIB)-1.2.8
 ZLIB_SRC             := $(ZLIB_VERSION).tar.gz
 
-export PORTLIBS_PATH := $(DEVKITARM)/portlibs
+export PORTLIBS_PATH := $(DEVKITPRO)/portlibs
 export PATH          := $(DEVKITARM)/bin:$(PORTLIBS_PATH)/3ds/bin:$(PORTLIBS_PATH)/armv6k/bin:$(PATH)
 export PKG_CONFIG    := $(PWD)/arm-none-eabi-pkg-config
 
