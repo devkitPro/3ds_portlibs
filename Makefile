@@ -66,7 +66,7 @@ all:
 	@echo "  $(ZLIB)"
 
 $(FREETYPE): $(FREETYPE_SRC)
-	@[ -d $(FREETYPE_VERSION) ] || tar -jxf $<
+	@[ -d $(FREETYPE_VERSION) ] || tar -xjf $<
 	@cd $(FREETYPE_VERSION) && \
 	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
 	@$(MAKE) -C $(FREETYPE_VERSION)
@@ -79,13 +79,13 @@ $(JANSSON): $(JANSSON_SRC)
 	@$(MAKE) -C $(JANSSON_VERSION)
 
 $(LIBEXIF): $(LIBEXIF_SRC)
-	@[ -d $(LIBEXIF_VERSION) ] || tar -jxf $<
+	@[ -d $(LIBEXIF_VERSION) ] || tar -xjf $<
 	@cd $(LIBEXIF_VERSION) && \
 	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
 	@$(MAKE) -C $(LIBEXIF_VERSION)
 
 $(LIBJPEGTURBO): $(LIBJPEGTURBO_SRC)
-	@[ -d $(LIBJPEGTURBO_VERSION) ] || tar -xaf $<
+	@[ -d $(LIBJPEGTURBO_VERSION) ] || tar -xzf $<
 	@cd $(LIBJPEGTURBO_VERSION) && \
 	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
 	@$(MAKE) CFLAGS+="\"-Drandom()=rand()\"" -C $(LIBJPEGTURBO_VERSION)
@@ -97,14 +97,14 @@ $(LIBPNG): $(LIBPNG_SRC)
 	@$(MAKE) -C $(LIBPNG_VERSION)
 
 $(LIBXMP_LITE): $(LIBXMP_LITE_SRC)
-	@[ -d $(LIBXMP_LITE_VERSION) ] || tar -xaf $<
+	@[ -d $(LIBXMP_LITE_VERSION) ] || tar -xzf $<
 	@cd $(LIBXMP_LITE_VERSION) && \
 	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
 	@$(MAKE) -C $(LIBXMP_LITE_VERSION)
 
 # sqlite won't work with -ffast-math
 $(SQLITE): $(SQLITE_SRC)
-	@[ -d $(SQLITE_VERSION) ] || tar -xaf $<
+	@[ -d $(SQLITE_VERSION) ] || tar -xzf $<
 	@cd $(SQLITE_VERSION) && \
 	 CFLAGS="$(filter-out -ffast-math,$(CFLAGS)) -DSQLITE_OS_OTHER=1" ./configure --disable-shared --disable-threadsafe --disable-dynamic-extensions --host=arm-none-eabi --prefix=$(PORTLIBS_PATH)/armv6k
 	# avoid building sqlite3 shell
@@ -116,7 +116,7 @@ $(TINYXML): $(TINYXML_SRC)
 	@cd $(TINYXML_VERSION) && cmake -DCMAKE_SYSTEM_NAME=Generic -DCMAKE_C_COMPILER=$(DEVKITARM)/bin/arm-none-eabi-gcc -DCMAKE_CXX_COMPILER=$(DEVKITARM)/bin/arm-none-eabi-g++ -DCMAKE_INSTALL_PREFIX=$(PORTLIBS_PATH)/armv6k .
 
 $(ZLIB): $(ZLIB_SRC)
-	@[ -d $(ZLIB_VERSION) ] || tar -xaf $<
+	@[ -d $(ZLIB_VERSION) ] || tar -xzf $<
 	@cd $(ZLIB_VERSION) && \
 	 CHOST=arm-none-eabi ./configure --static --prefix=$(PORTLIBS_PATH)/armv6k
 	@$(MAKE) -C $(ZLIB_VERSION)
