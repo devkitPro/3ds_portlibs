@@ -26,12 +26,13 @@ ZLIB                 := zlib
 ZLIB_VERSION         := $(ZLIB)-1.2.8
 ZLIB_SRC             := $(ZLIB_VERSION).tar.gz
 
-export PATH          := $(DEVKITARM)/bin:$(DEVKITPRO)/portlibs/3ds/bin:$(DEVKITPRO)/portlibs/armv6k/bin:$(PATH)
+export PORTLIBS_PATH := $(DEVKITARM)/portlibs
+export PATH          := $(DEVKITARM)/bin:$(PORTLIBS_PATH)/3ds/bin:$(PORTLIBS_PATH)/armv6k/bin:$(PATH)
 export PKG_CONFIG    := $(PWD)/arm-none-eabi-pkg-config
 
 export CFLAGS        := -march=armv6k -mtune=mpcore -mfloat-abi=hard -mtp=soft -O3 -mword-relocations
-export CPPFLAGS      := -I$(PORTLIBS)/include
-export LDFLAGS       := -L$(PORTLIBS)/lib
+export CPPFLAGS      := -I$(PORTLIBS_PATH)/armv6k/include
+export LDFLAGS       := -L$(PORTLIBS_PATH)/armv6k/lib
 
 .PHONY: all install install-zlib clean \
         $(FREETYPE) \
@@ -55,45 +56,45 @@ all:
 $(FREETYPE): $(FREETYPE_SRC)
 	@[ -d $(FREETYPE_VERSION) ] || tar -jxf $<
 	@cd $(FREETYPE_VERSION) && \
-	 ./configure --prefix=$(PORTLIBS) --host=arm-none-eabi --disable-shared --enable-static
+	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
 	@$(MAKE) -C $(FREETYPE_VERSION)
 
 $(LIBEXIF): $(LIBEXIF_SRC)
 	@[ -d $(LIBEXIF_VERSION) ] || tar -jxf $<
 	@cd $(LIBEXIF_VERSION) && \
-	 ./configure --prefix=$(PORTLIBS) --host=arm-none-eabi --disable-shared --enable-static
+	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
 	@$(MAKE) -C $(LIBEXIF_VERSION)
 
 $(LIBJPEGTURBO): $(LIBJPEGTURBO_SRC)
 	@[ -d $(LIBJPEGTURBO_VERSION) ] || tar -xaf $<
 	@cd $(LIBJPEGTURBO_VERSION) && \
-	 ./configure --prefix=$(PORTLIBS) --host=arm-none-eabi --disable-shared --enable-static
+	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
 	@$(MAKE) CFLAGS+="\"-Drandom()=rand()\"" -C $(LIBJPEGTURBO_VERSION)
 
 $(LIBPNG): $(LIBPNG_SRC)
 	@[ -d $(LIBPNG_VERSION) ] || tar -xJf $<
 	@cd $(LIBPNG_VERSION) && \
-	 ./configure --prefix=$(PORTLIBS) --host=arm-none-eabi --disable-shared --enable-static
+	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
 	@$(MAKE) -C $(LIBPNG_VERSION)
 
 $(LIBXMP_LITE): $(LIBXMP_LITE_SRC)
 	@[ -d $(LIBXMP_LITE_VERSION) ] || tar -xaf $<
 	@cd $(LIBXMP_LITE_VERSION) && \
-	 ./configure --prefix=$(PORTLIBS) --host=arm-none-eabi --disable-shared --enable-static
+	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
 	@$(MAKE) -C $(LIBXMP_LITE_VERSION)
 
 # sqlite won't work with -ffast-math
 $(SQLITE): $(SQLITE_SRC)
 	@[ -d $(SQLITE_VERSION) ] || tar -xaf $<
 	@cd $(SQLITE_VERSION) && \
-	 CFLAGS="$(filter-out -ffast-math,$(CFLAGS)) -DSQLITE_OS_OTHER=1" ./configure --disable-shared --disable-threadsafe --disable-dynamic-extensions --host=arm-none-eabi --prefix=$(PORTLIBS)
+	 CFLAGS="$(filter-out -ffast-math,$(CFLAGS)) -DSQLITE_OS_OTHER=1" ./configure --disable-shared --disable-threadsafe --disable-dynamic-extensions --host=arm-none-eabi --prefix=$(PORTLIBS_PATH)/armv6k
 	# avoid building sqlite3 shell
 	@$(MAKE) -C $(SQLITE_VERSION) libsqlite3.la
 
 $(ZLIB): $(ZLIB_SRC)
 	@[ -d $(ZLIB_VERSION) ] || tar -xaf $<
 	@cd $(ZLIB_VERSION) && \
-	 CHOST=arm-none-eabi ./configure --static --prefix=$(PORTLIBS)
+	 CHOST=arm-none-eabi ./configure --static --prefix=$(PORTLIBS_PATH)/armv6k
 	@$(MAKE) -C $(ZLIB_VERSION)
 
 install-zlib: 
