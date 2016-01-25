@@ -108,7 +108,7 @@ $(ZLIB_SRC):
 $(FREETYPE): $(FREETYPE_SRC)
 	@[ -d $(FREETYPE_VERSION) ] || tar -xjf $<
 	@cd $(FREETYPE_VERSION) && \
-	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
+	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static --without-harfbuzz
 	@$(MAKE) -C $(FREETYPE_VERSION)
 
 $(JANSSON): $(JANSSON_SRC)
