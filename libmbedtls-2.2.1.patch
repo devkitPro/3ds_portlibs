@@ -1,0 +1,12 @@
+diff -Naur mbedtls-2.2.1/include/mbedtls/config.h mbedtls-2.2.1-mod/include/mbedtls/config.h
+--- mbedtls-2.2.1/include/mbedtls/config.h	2016-01-04 20:38:18.000000000 -0800
++++ mbedtls-2.2.1-mod/include/mbedtls/config.h	2016-05-21 11:43:29.887604004 -0700
+@@ -1905,7 +1905,7 @@
+  *
+  * This module provides TCP/IP networking routines.
+  */
+-#define MBEDTLS_NET_C
++//#define MBEDTLS_NET_C
+ 
+ /**
+  * \def MBEDTLS_OID_C
