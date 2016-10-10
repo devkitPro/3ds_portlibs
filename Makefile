@@ -312,9 +312,9 @@ install-zlib:
 install:
 	@[ ! -d $(BZIP2_VERSION) ] || \
 		cp -fv $(BZIP2_VERSION)/bzlib.h $(PORTLIBS_PATH)/armv6k/include && \
-		chmod a+r $(PREFIX)/include/bzlib.h && \
+		chmod a+r $(PORTLIBS_PATH)/armv6k/include/bzlib.h && \
 		cp -fv $(BZIP2_VERSION)/libbz2.a $(PORTLIBS_PATH)/armv6k/lib && \
-		chmod a+r $(PREFIX)/lib/libbz2.a
+		chmod a+r $(PORTLIBS_PATH)/armv6k/lib/libbz2.a
 
 	@[ ! -d $(FREETYPE_VERSION) ] || $(MAKE) -C $(FREETYPE_VERSION) install
 	@[ ! -d $(GIFLIB_VERSION) ] || $(MAKE) -C $(GIFLIB_VERSION) install
