@@ -321,10 +321,7 @@ install:
 		cp -fv $(BZIP2_VERSION)/libbz2.a $(PORTLIBS_PATH)/armv6k/lib; \
 		chmod a+r $(PORTLIBS_PATH)/armv6k/lib/libbz2.a; \
 	fi
-<<<<<<< HEAD
 
-=======
->>>>>>> upstream/master
 	@[ ! -d $(FREETYPE_VERSION) ] || $(MAKE) -C $(FREETYPE_VERSION) install
 	@[ ! -d $(GIFLIB_VERSION) ] || $(MAKE) -C $(GIFLIB_VERSION) install
 	@[ ! -d $(JANSSON_VERSION) ] || $(MAKE) -C $(JANSSON_VERSION) install
