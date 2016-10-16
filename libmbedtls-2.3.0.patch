@@ -1,0 +1,30 @@
+diff -Naur mbedtls-2.3.0/include/mbedtls/config.h mbedtls-2.3.0-mod/include/mbedtls/config.h
+--- mbedtls-2.3.0/include/mbedtls/config.h	2016-06-27 20:50:36.000000000 +0200
++++ mbedtls-2.3.0-mod/include/mbedtls/config.h	2016-07-04 19:34:43.590260887 +0200
+@@ -799,7 +799,7 @@
+  *
+  * Uncomment this macro to disable the built-in platform entropy functions.
+  */
+-//#define MBEDTLS_NO_PLATFORM_ENTROPY
++#define MBEDTLS_NO_PLATFORM_ENTROPY
+ 
+ /**
+  * \def MBEDTLS_ENTROPY_FORCE_SHA256
+@@ -1958,7 +1958,7 @@
+  *
+  * This module provides networking routines.
+  */
+-#define MBEDTLS_NET_C
++//#define MBEDTLS_NET_C
+ 
+ /**
+  * \def MBEDTLS_OID_C
+@@ -2338,7 +2338,7 @@
+  *
+  * This module is used by the HAVEGE random number generator.
+  */
+-#define MBEDTLS_TIMING_C
++//#define MBEDTLS_TIMING_C
+ 
+ /**
+  * \def MBEDTLS_VERSION_C
