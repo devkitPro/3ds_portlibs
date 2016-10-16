@@ -139,7 +139,7 @@ all:
 
 download: $(BZIP2_SRC) $(FREETYPE_SRC) $(GIFLIB_SRC) $(JANSSON_SRC) $(LIBCONFIG_SRC) $(LIBEXIF_SRC) $(LIBJPEGTURBO_SRC) $(LIBMAD_SRC) $(LIBOGG_SRC) $(LIBPNG_SRC) $(LIBXML2_SRC) $(LIBXMP_LITE_SRC) $(MBED_SRC) $(SQLITE_SRC) $(TINYXML_SRC) $(TREMOR_SRC) $(XZ_SRC) $(ZLIB_SRC)
 
-DOWNLOAD = wget -O "$(1)" "$(2)" || curl -Lo "$(1)" "$(2)"
+DOWNLOAD = wget -O "$(1)" "$(2)" --no-check-certificate || curl -Lo "$(1)" "$(2)"
 
 $(BZIP2_SRC):
 	@$(call DOWNLOAD,$@,$(BZIP2_DOWNLOAD))
@@ -310,11 +310,12 @@ install-zlib:
 	@$(MAKE) -C $(ZLIB_VERSION) install
 
 install:
-	@[ ! -d $(BZIP2_VERSION) ] || \
-		cp -fv $(BZIP2_VERSION)/bzlib.h $(PORTLIBS_PATH)/armv6k/include && \
-		chmod a+r $(PORTLIBS_PATH)/armv6k/include/bzlib.h && \
-		cp -fv $(BZIP2_VERSION)/libbz2.a $(PORTLIBS_PATH)/armv6k/lib && \
-		chmod a+r $(PORTLIBS_PATH)/armv6k/lib/libbz2.a
+	@if [ -d $(BZIP2_VERSION) ]; then \
+		cp -fv $(BZIP2_VERSION)/bzlib.h $(PORTLIBS_PATH)/armv6k/include; \
+		chmod a+r $(PORTLIBS_PATH)/armv6k/include/bzlib.h; \
+		cp -fv $(BZIP2_VERSION)/libbz2.a $(PORTLIBS_PATH)/armv6k/lib; \
+		chmod a+r $(PORTLIBS_PATH)/armv6k/lib/libbz2.a; \
+	fi
 
 	@[ ! -d $(FREETYPE_VERSION) ] || $(MAKE) -C $(FREETYPE_VERSION) install
 	@[ ! -d $(GIFLIB_VERSION) ] || $(MAKE) -C $(GIFLIB_VERSION) install
