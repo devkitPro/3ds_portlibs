@@ -235,7 +235,7 @@ $(LIBJPEGTURBO): $(LIBJPEGTURBO_SRC)
 	@[ -d $(LIBJPEGTURBO_VERSION) ] || tar -xzf $<
 	@cd $(LIBJPEGTURBO_VERSION) && \
 	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
-	@$(MAKE) CFLAGS+="\"-Drandom()=rand()\"" -C $(LIBJPEGTURBO_VERSION)
+	@$(MAKE) -C $(LIBJPEGTURBO_VERSION)
 
 $(LIBMAD): $(LIBMAD_SRC)
 	@[ -d $(LIBMAD_VERSION) ] || tar -xzf $<
