@@ -48,6 +48,11 @@ LIBPNG_VERSION        := $(LIBPNG)-1.6.21
 LIBPNG_SRC            := $(LIBPNG_VERSION).tar.xz
 LIBPNG_DOWNLOAD       := http://prdownloads.sourceforge.net/libpng/libpng-1.6.21.tar.xz?download
 
+LIBSSH2                := libssh2
+LIBSSH2_VERSION        := $(LIBSSH2)-1.8.0
+LIBSSH2_SRC            := $(LIBSSH2_VERSION).tar.xz
+LIBSSH2_DOWNLOAD       := https://www.libssh2.org/download/libssh2-1.8.0.tar.gz
+
 LIBXML2               := libxml2
 LIBXML2_VERSION       := $(LIBXML2)-2.9.3
 LIBXML2_SRC           := $(LIBXML2_VERSION).tar.gz
@@ -108,6 +113,7 @@ export LDFLAGS        := -L$(PORTLIBS_PATH)/armv6k/lib
         $(LIBOGG) \
         $(LIBPNG) \
         $(MBED) \
+        $(LIBSSH2) \
         $(LIBXML2) \
         $(LIBXMP_LITE) \
         $(SQLITE) \
@@ -130,6 +136,7 @@ all:
 	@echo "  $(LIBPNG) (requires zlib to be installed)"
 	@echo "  $(LIBXML2)"
 	@echo "  $(LIBXMP_LITE)"
+	@echo "  $(LIBSSH2) (required mbedtls, better with zlib installed)"
 	@echo "  $(MBED) (requires zlib to be installed)"
 	@echo "  $(SQLITE)"
 	@echo "  $(TINYXML)"
@@ -137,7 +144,7 @@ all:
 	@echo "  $(XZ)"
 	@echo "  $(ZLIB)"
 
-download: $(BZIP2_SRC) $(FREETYPE_SRC) $(GIFLIB_SRC) $(JANSSON_SRC) $(LIBCONFIG_SRC) $(LIBEXIF_SRC) $(LIBJPEGTURBO_SRC) $(LIBMAD_SRC) $(LIBOGG_SRC) $(LIBPNG_SRC) $(LIBXML2_SRC) $(LIBXMP_LITE_SRC) $(MBED_SRC) $(SQLITE_SRC) $(TINYXML_SRC) $(TREMOR_SRC) $(XZ_SRC) $(ZLIB_SRC)
+download: $(BZIP2_SRC) $(FREETYPE_SRC) $(GIFLIB_SRC) $(JANSSON_SRC) $(LIBCONFIG_SRC) $(LIBEXIF_SRC) $(LIBJPEGTURBO_SRC) $(LIBMAD_SRC) $(LIBOGG_SRC) $(LIBPNG_SRC) $(LIBSSH2_SRC) $(LIBXML2_SRC) $(LIBXMP_LITE_SRC) $(MBED_SRC) $(SQLITE_SRC) $(TINYXML_SRC) $(TREMOR_SRC) $(XZ_SRC) $(ZLIB_SRC)
 
 DOWNLOAD = wget -O "$(1)" "$(2)" || curl -Lo "$(1)" "$(2)"
 
@@ -170,6 +177,9 @@ $(LIBOGG_SRC):
 
 $(LIBPNG_SRC):
 	@$(call DOWNLOAD,$@,$(LIBPNG_DOWNLOAD))
+
+$(LIBSSH2_SRC):
+	@$(call DOWNLOAD,$@,$(LIBSSH2_DOWNLOAD))
 
 $(LIBXML2_SRC):
 	@$(call DOWNLOAD,$@,$(LIBXML2_DOWNLOAD))
@@ -256,6 +266,14 @@ $(LIBPNG): $(LIBPNG_SRC)
 	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
 	@$(MAKE) -C $(LIBPNG_VERSION)
 
+#LDLIBS="-llibctru"
+$(LIBSSH2): $(LIBSSH2_SRC)
+	@[ -d $(LIBSSH2_VERSION) ] || tar -xJf $<
+	@cd $(LIBSSH2_VERSION) && \
+	 patch -Np1 -i ../libssh2-1.8.0.patch && \
+	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static --with-mbedtls=$(PORTLIBS_PATH)/armv6k --with-libmbedtls-prefix=$(PORTLIBS_PATH)/armv6k --disable-examples-build
+	@$(MAKE) -C $(LIBSSH2_VERSION)
+
 $(LIBXML2): $(LIBXML2_SRC)
 	@[ -d $(LIBXML2_VERSION) ] || tar -xzf $<
 	@cd $(LIBXML2_VERSION) && \
@@ -330,6 +348,7 @@ install:
 	@[ ! -d $(LIBMAD_VERSION) ] || $(MAKE) -C $(LIBMAD_VERSION) install
 	@[ ! -d $(LIBOGG_VERSION) ] || $(MAKE) -C $(LIBOGG_VERSION) install
 	@[ ! -d $(LIBPNG_VERSION) ] || $(MAKE) -C $(LIBPNG_VERSION) install
+	@[ ! -d $(LIBSSH2_VERSION) ] || $(MAKE) -C $(LIBSSH2_VERSION) install
 	@[ ! -d $(LIBXML2_VERSION) ] || $(MAKE) -C $(LIBXML2_VERSION) install
 	@[ ! -d $(LIBXMP_LITE_VERSION) ] || $(MAKE) -C $(LIBXMP_LITE_VERSION) install
 	@[ ! -d $(MBED_VERSION) ] || $(MAKE) -C $(MBED_VERSION) install
@@ -349,6 +368,7 @@ clean:
 	@$(RM) -r $(LIBMAD_VERSION)
 	@$(RM) -r $(LIBOGG_VERSION)
 	@$(RM) -r $(LIBPNG_VERSION)
+	@$(RM) -r $(LIBSSH2_VERSION)
 	@$(RM) -r $(LIBXML2_VERSION)
 	@$(RM) -r $(LIBXMP_LITE_VERSION)
 	@$(RM) -r $(MBED_VERSION)

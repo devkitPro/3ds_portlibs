@@ -1,0 +1,49 @@
+diff -Naur libssh2-1.8.0/Makefile.am.orig libssh2-1.8.0/Makefile.am
+--- libssh2-1.8.0/Makefile.am	2016-12-02 20:07:34.000000000 -0500
++++ libssh2-1.8.0-mod/Makefile.am	2016-12-02 20:07:48.000000000 -0500
+@@ -1,6 +1,6 @@
+ AUTOMAKE_OPTIONS = foreign nostdinc
+ 
+-SUBDIRS = src tests docs
++SUBDIRS = src docs
+ if BUILD_EXAMPLES
+ SUBDIRS += example
+ endif
+
+diff -Naur libssh2-1.8.0/src/libssh2_priv.h.orig libssh2-1.8.0/src/libssh2_priv.h
+--- libssh2-1.8.0/src/libssh2_priv.h	2016-12-02 20:11:49.000000000 -0500
++++ libssh2-1.8.0-mod/src/libssh2_priv.h	2016-12-02 20:12:17.000000000 -0500
+@@ -132,6 +132,11 @@
+ 
+ #endif /* WIN32 */
+ 
++struct iovec {
++    size_t iov_len;
++    void * iov_base;
++};
++
+ #ifdef __OS400__
+ /* Force parameter type. */
+ #define send(s, b, l, f)    send((s), (unsigned char *) (b), (l), (f))
+
+diff -Naur libssh2-1.8.0/Makefile.in libssh2-1.8.0-mod/Makefile.in
+--- libssh2-1.8.0/Makefile.in	2016-10-25 02:44:33.000000000 -0400
++++ libssh2-1.8.0-mod/Makefile.in	2016-12-02 20:19:50.000000000 -0500
+@@ -195,7 +195,7 @@
+ ETAGS = etags
+ CTAGS = ctags
+ CSCOPE = cscope
+-DIST_SUBDIRS = src tests docs example
++DIST_SUBDIRS = src docs
+ am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.inc \
+ 	$(srcdir)/libssh2.pc.in COPYING ChangeLog NEWS README compile \
+ 	config.guess config.rpath config.sub depcomp install-sh \
+@@ -389,7 +389,7 @@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+ AUTOMAKE_OPTIONS = foreign nostdinc
+-SUBDIRS = src tests docs $(am__append_1)
++SUBDIRS = src docs $(am__append_1)
+ pkgconfigdir = $(libdir)/pkgconfig
+ pkgconfig_DATA = libssh2.pc
+ include_HEADERS = \
