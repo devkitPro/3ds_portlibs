@@ -54,9 +54,9 @@ LIBXMP_LITE_SRC       := $(LIBXMP_LITE_VERSION).tar.gz
 LIBXMP_LITE_DOWNLOAD  := http://sourceforge.net/projects/xmp/files/libxmp/4.3.10/libxmp-lite-4.3.10.tar.gz/download
 
 MBED                  := mbedtls
-MBED_VERSION          := $(MBED)-2.2.1
+MBED_VERSION          := $(MBED)-2.4.0
 MBED_SRC              := $(MBED_VERSION).tgz
-MBED_DOWNLOAD         := "https://tls.mbed.org/download/mbedtls-2.2.1-gpl.tgz"
+MBED_DOWNLOAD         := "https://tls.mbed.org/download/mbedtls-2.4.0-gpl.tgz"
 
 TINYXML               := tinyxml2
 TINYXML_VERSION       := $(TINYXML)-3.0.0
@@ -245,7 +245,7 @@ $(LIBXMP_LITE): $(LIBXMP_LITE_SRC)
 $(MBED): $(MBED_SRC)
 	@[ -d $(MBED_VERSION) ] || tar xzf $<
 	@cd $(MBED_VERSION) && \
-	 patch -Np1 -i ../libmbedtls-2.2.1.patch && \
+	 patch -Np1 -i ../libmbedtls-2.4.0.patch && \
 	 cmake -DCMAKE_SYSTEM_NAME=Generic -DCMAKE_C_COMPILER=$(DEVKITARM)/bin/arm-none-eabi-gcc \
 	 -DCMAKE_CXX_COMPILER=$(DEVKITARM)/bin/arm-none-eabi-g++ \
 	 -DCMAKE_INSTALL_PREFIX=$(PORTLIBS_PATH)/armv6k -DCMAKE_C_FLAGS="$(CFLAGS)" \
