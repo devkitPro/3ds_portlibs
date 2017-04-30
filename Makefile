@@ -90,7 +90,7 @@ ZLIB_DOWNLOAD         := http://prdownloads.sourceforge.net/libpng/zlib-1.2.8.ta
 
 export PORTLIBS_PATH  := $(DEVKITPRO)/portlibs
 export PATH           := $(DEVKITARM)/bin:$(PORTLIBS_PATH)/3ds/bin:$(PORTLIBS_PATH)/armv6k/bin:$(PATH)
-export PKG_CONFIG     := $(PWD)/arm-none-eabi-pkg-config
+export PKG_CONFIG     := $(CURDIR)/arm-none-eabi-pkg-config
 
 export CFLAGS         := -march=armv6k -mtune=mpcore -mfloat-abi=hard -mtp=soft -O3 -mword-relocations -ffunction-sections
 export CPPFLAGS       := -I$(PORTLIBS_PATH)/armv6k/include
