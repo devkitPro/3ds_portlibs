@@ -14,9 +14,9 @@ GIFLIB_SRC            := $(GIFLIB_VERSION).tar.bz2
 GIFLIB_DOWNLOAD       := "http://sourceforge.net/projects/giflib/files/giflib-5.1.1.tar.bz2"
 
 JANSSON               := jansson
-JANSSON_VERSION       := $(JANSSON)-2.7
-JANSSON_SRC           := $(JANSSON_VERSION).tar.gz
-JANSSON_DOWNLOAD      := https://github.com/akheron/jansson/archive/v2.7.tar.gz
+JANSSON_VERSION       := $(JANSSON)-2.10
+JANSSON_SRC           := $(JANSSON_VERSION).tar.bz2
+JANSSON_DOWNLOAD      := http://www.digip.org/jansson/releases/jansson-2.10.tar.bz2
 
 LIBCONFIG             := libconfig
 LIBCONFIG_VERSION     := $(LIBCONFIG)-1.5
@@ -213,9 +213,8 @@ $(GIFLIB): $(GIFLIB_SRC)
 	@$(MAKE) -C $(GIFLIB_VERSION)
 
 $(JANSSON): $(JANSSON_SRC)
-	@[ -d $(JANSSON_VERSION) ] || tar -xzf $<
+	@[ -d $(JANSSON_VERSION) ] || tar -xjf $<
 	@cd $(JANSSON_VERSION) && \
-	 autoreconf -i && \
 	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
 	@$(MAKE) -C $(JANSSON_VERSION)
 
