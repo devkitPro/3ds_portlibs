@@ -194,7 +194,7 @@ $(BZIP2): $(BZIP2_SRC)
 $(CURL): $(CURL_SRC)
 	@[ -d $(CURL_VERSION) ] || tar -xjf $<
 	@cd $(CURL_VERSION) && \
-	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
+	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static --disable-ipv6
 	@$(MAKE) -C $(CURL_VERSION)
 
 $(FREETYPE): $(FREETYPE_SRC)
