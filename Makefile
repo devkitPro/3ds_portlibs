@@ -3,6 +3,11 @@ BZIP2_VERSION         := $(BZIP2)-1.0.6
 BZIP2_SRC             := $(BZIP2_VERSION).tar.gz
 BZIP2_DOWNLOAD        := "http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz"
 
+CURL               := curl
+CURL_VERSION       := $(CURL)-7.54.1
+CURL_SRC           := $(CURL_VERSION).tar.bz2
+CURL_DOWNLOAD      := "https://curl.haxx.se/download/curl-7.54.1.tar.bz2"
+
 FREETYPE              := freetype
 FREETYPE_VERSION      := $(FREETYPE)-2.6.2
 FREETYPE_SRC          := $(FREETYPE_VERSION).tar.bz2
@@ -93,6 +98,7 @@ export LIBS           := -lctru
         $(GIFLIB) \
         $(JANSSON) \
         $(LIBCONFIG) \
+        $(LIBCURL) \
         $(LIBEXIF) \
         $(LIBJPEGTURBO) \
         $(LIBMAD) \
@@ -112,6 +118,7 @@ all:
 	@echo "  $(GIFLIB)"
 	@echo "  $(JANSSON)"
 	@echo "  $(LIBCONFIG)"
+	@echo "  $(CURL)"
 	@echo "  $(LIBEXIF)"
 	@echo "  $(LIBJPEGTURBO)"
 	@echo "  $(LIBMAD)"
@@ -130,6 +137,9 @@ DOWNLOAD = wget --no-check-certificate -O "$(1)" "$(2)" || curl -Lo "$(1)" "$(2)
 
 $(BZIP2_SRC):
 	@$(call DOWNLOAD,$@,$(BZIP2_DOWNLOAD))
+
+$(CURL_SRC):
+	@$(call DOWNLOAD,$@,$(CURL_DOWNLOAD))
 
 $(FREETYPE_SRC):
 	$(call DOWNLOAD,$@,$(FREETYPE_DOWNLOAD))
@@ -180,6 +190,12 @@ $(BZIP2): $(BZIP2_SRC)
 	@[ -d $(BZIP2_VERSION) ] || tar -xzf $<
 	@cd $(BZIP2_VERSION)
 	@$(MAKE) -C $(BZIP2_VERSION) CC=arm-none-eabi-gcc AR=arm-none-eabi-ar RANLIB=arm-none-eabi-ranlib CPPFLAGS="$(CPPFLAGS)" CFLAGS="-D_FILE_OFFSET_BITS=64 -Winline $(CFLAGS)" libbz2.a
+
+$(CURL): $(CURL_SRC)
+	@[ -d $(CURL_VERSION) ] || tar -xjf $<
+	@cd $(CURL_VERSION) && \
+	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
+	@$(MAKE) -C $(CURL_VERSION)
 
 $(FREETYPE): $(FREETYPE_SRC)
 	@[ -d $(FREETYPE_VERSION) ] || tar -xjf $<
