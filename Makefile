@@ -48,11 +48,6 @@ LIBPNG_VERSION        := $(LIBPNG)-1.6.21
 LIBPNG_SRC            := $(LIBPNG_VERSION).tar.xz
 LIBPNG_DOWNLOAD       := http://prdownloads.sourceforge.net/libpng/libpng-1.6.21.tar.xz?download
 
-LIBXML2               := libxml2
-LIBXML2_VERSION       := $(LIBXML2)-2.9.3
-LIBXML2_SRC           := $(LIBXML2_VERSION).tar.gz
-LIBXML2_DOWNLOAD      := "http://xmlsoft.org/sources/libxml2-2.9.3.tar.gz"
-
 LIBXMP_LITE           := libxmp-lite
 LIBXMP_LITE_VERSION   := $(LIBXMP_LITE)-4.3.10
 LIBXMP_LITE_SRC       := $(LIBXMP_LITE_VERSION).tar.gz
@@ -108,7 +103,6 @@ export LDFLAGS        := -L$(PORTLIBS_PATH)/armv6k/lib
         $(LIBOGG) \
         $(LIBPNG) \
         $(MBED) \
-        $(LIBXML2) \
         $(LIBXMP_LITE) \
         $(SQLITE) \
         $(TINYXML) \
@@ -128,7 +122,6 @@ all:
 	@echo "  $(LIBMAD)"
 	@echo "  $(LIBOGG)"
 	@echo "  $(LIBPNG) (requires zlib to be installed)"
-	@echo "  $(LIBXML2)"
 	@echo "  $(LIBXMP_LITE)"
 	@echo "  $(MBED) (requires zlib to be installed)"
 	@echo "  $(SQLITE)"
@@ -137,7 +130,7 @@ all:
 	@echo "  $(XZ)"
 	@echo "  $(ZLIB)"
 
-download: $(BZIP2_SRC) $(FREETYPE_SRC) $(GIFLIB_SRC) $(JANSSON_SRC) $(LIBCONFIG_SRC) $(LIBEXIF_SRC) $(LIBJPEGTURBO_SRC) $(LIBMAD_SRC) $(LIBOGG_SRC) $(LIBPNG_SRC) $(LIBXML2_SRC) $(LIBXMP_LITE_SRC) $(MBED_SRC) $(SQLITE_SRC) $(TINYXML_SRC) $(TREMOR_SRC) $(XZ_SRC) $(ZLIB_SRC)
+download: $(BZIP2_SRC) $(FREETYPE_SRC) $(GIFLIB_SRC) $(JANSSON_SRC) $(LIBCONFIG_SRC) $(LIBEXIF_SRC) $(LIBJPEGTURBO_SRC) $(LIBMAD_SRC) $(LIBOGG_SRC) $(LIBPNG_SRC) $(LIBXMP_LITE_SRC) $(MBED_SRC) $(SQLITE_SRC) $(TINYXML_SRC) $(TREMOR_SRC) $(XZ_SRC) $(ZLIB_SRC)
 
 DOWNLOAD = wget --no-check-certificate -O "$(1)" "$(2)" || curl -Lo "$(1)" "$(2)"
 
@@ -170,9 +163,6 @@ $(LIBOGG_SRC):
 
 $(LIBPNG_SRC):
 	@$(call DOWNLOAD,$@,$(LIBPNG_DOWNLOAD))
-
-$(LIBXML2_SRC):
-	@$(call DOWNLOAD,$@,$(LIBXML2_DOWNLOAD))
 
 $(LIBXMP_LITE_SRC):
 	@$(call DOWNLOAD,$@,$(LIBXMP_LITE_DOWNLOAD))
@@ -255,12 +245,6 @@ $(LIBPNG): $(LIBPNG_SRC)
 	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
 	@$(MAKE) -C $(LIBPNG_VERSION)
 
-$(LIBXML2): $(LIBXML2_SRC)
-	@[ -d $(LIBXML2_VERSION) ] || tar -xzf $<
-	@cd $(LIBXML2_VERSION) && \
-	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static --without-http --without-ftp --without-threads
-	@$(MAKE) -C $(LIBXML2_VERSION) libxml2.la
-
 $(LIBXMP_LITE): $(LIBXMP_LITE_SRC)
 	@[ -d $(LIBXMP_LITE_VERSION) ] || tar -xzf $<
 	@cd $(LIBXMP_LITE_VERSION) && \
@@ -329,7 +313,6 @@ install:
 	@[ ! -d $(LIBMAD_VERSION) ] || $(MAKE) -C $(LIBMAD_VERSION) install
 	@[ ! -d $(LIBOGG_VERSION) ] || $(MAKE) -C $(LIBOGG_VERSION) install
 	@[ ! -d $(LIBPNG_VERSION) ] || $(MAKE) -C $(LIBPNG_VERSION) install
-	@[ ! -d $(LIBXML2_VERSION) ] || $(MAKE) -C $(LIBXML2_VERSION) install
 	@[ ! -d $(LIBXMP_LITE_VERSION) ] || $(MAKE) -C $(LIBXMP_LITE_VERSION) install
 	@[ ! -d $(MBED_VERSION) ] || $(MAKE) -C $(MBED_VERSION) install
 	@[ ! -d $(SQLITE_VERSION) ] || $(MAKE) -C $(SQLITE_VERSION) install-libLTLIBRARIES install-data
@@ -348,7 +331,6 @@ clean:
 	@$(RM) -r $(LIBMAD_VERSION)
 	@$(RM) -r $(LIBOGG_VERSION)
 	@$(RM) -r $(LIBPNG_VERSION)
-	@$(RM) -r $(LIBXML2_VERSION)
 	@$(RM) -r $(LIBXMP_LITE_VERSION)
 	@$(RM) -r $(MBED_VERSION)
 	@$(RM) -r $(SQLITE_VERSION)
