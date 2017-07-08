@@ -83,8 +83,9 @@ export PATH           := $(DEVKITARM)/bin:$(PORTLIBS_PATH)/3ds/bin:$(PORTLIBS_PA
 export PKG_CONFIG     := $(PWD)/arm-none-eabi-pkg-config
 
 export CFLAGS         := -march=armv6k -mtune=mpcore -mfloat-abi=hard -mtp=soft -O3 -mword-relocations -ffunction-sections
-export CPPFLAGS       := -I$(PORTLIBS_PATH)/armv6k/include
-export LDFLAGS        := -L$(PORTLIBS_PATH)/armv6k/lib
+export CPPFLAGS       := -I$(DEVKITPRO)/libctru/include -I$(PORTLIBS_PATH)/3ds/include -I$(PORTLIBS_PATH)/armv6k/include
+export LDFLAGS        := -L$(DEVKITPRO)/libctru/lib -L$(PORTLIBS_PATH)/3ds/lib -L$(PORTLIBS_PATH)/armv6k/lib
+export LIBS           := -lctru
 
 .PHONY: all install install-zlib clean download \
         $(BZIP2) \
