@@ -58,11 +58,6 @@ MBED_VERSION          := $(MBED)-2.2.1
 MBED_SRC              := $(MBED_VERSION).tgz
 MBED_DOWNLOAD         := "https://tls.mbed.org/download/mbedtls-2.2.1-gpl.tgz"
 
-SQLITE                := sqlite
-SQLITE_VERSION        := $(SQLITE)-autoconf-3100200
-SQLITE_SRC            := $(SQLITE_VERSION).tar.gz
-SQLITE_DOWNLOAD       := https://www.sqlite.org/2016/sqlite-autoconf-3100200.tar.gz
-
 TINYXML               := tinyxml2
 TINYXML_VERSION       := $(TINYXML)-3.0.0
 TINYXML_SRC           := $(TINYXML_VERSION).tar.gz
@@ -104,7 +99,6 @@ export LDFLAGS        := -L$(PORTLIBS_PATH)/armv6k/lib
         $(LIBPNG) \
         $(MBED) \
         $(LIBXMP_LITE) \
-        $(SQLITE) \
         $(TINYXML) \
         $(TREMOR) \
         $(XZ) \
@@ -124,13 +118,12 @@ all:
 	@echo "  $(LIBPNG) (requires zlib to be installed)"
 	@echo "  $(LIBXMP_LITE)"
 	@echo "  $(MBED) (requires zlib to be installed)"
-	@echo "  $(SQLITE)"
 	@echo "  $(TINYXML)"
 	@echo "  $(TREMOR) (requires $(LIBOGG) to be installed)"
 	@echo "  $(XZ)"
 	@echo "  $(ZLIB)"
 
-download: $(BZIP2_SRC) $(FREETYPE_SRC) $(GIFLIB_SRC) $(JANSSON_SRC) $(LIBCONFIG_SRC) $(LIBEXIF_SRC) $(LIBJPEGTURBO_SRC) $(LIBMAD_SRC) $(LIBOGG_SRC) $(LIBPNG_SRC) $(LIBXMP_LITE_SRC) $(MBED_SRC) $(SQLITE_SRC) $(TINYXML_SRC) $(TREMOR_SRC) $(XZ_SRC) $(ZLIB_SRC)
+download: $(BZIP2_SRC) $(FREETYPE_SRC) $(GIFLIB_SRC) $(JANSSON_SRC) $(LIBCONFIG_SRC) $(LIBEXIF_SRC) $(LIBJPEGTURBO_SRC) $(LIBMAD_SRC) $(LIBOGG_SRC) $(LIBPNG_SRC) $(LIBXMP_LITE_SRC) $(MBED_SRC) $(TINYXML_SRC) $(TREMOR_SRC) $(XZ_SRC) $(ZLIB_SRC)
 
 DOWNLOAD = wget --no-check-certificate -O "$(1)" "$(2)" || curl -Lo "$(1)" "$(2)"
 
@@ -169,9 +162,6 @@ $(LIBXMP_LITE_SRC):
 
 $(MBED_SRC):
 	@$(call DOWNLOAD,$@,$(MBED_DOWNLOAD))
-
-$(SQLITE_SRC):
-	@$(call DOWNLOAD,$@,$(SQLITE_DOWNLOAD))
 
 $(TINYXML_SRC):
 	@$(call DOWNLOAD,$@,$(TINYXML_DOWNLOAD))
@@ -263,14 +253,6 @@ $(MBED): $(MBED_SRC)
 	 -DENABLE_ZLIB_SUPPORT=TRUE -DENABLE_TESTING=FALSE -DENABLE_PROGRAMS=FALSE .
 	@$(MAKE) -C $(MBED_VERSION)
 
-# sqlite won't work with -ffast-math
-$(SQLITE): $(SQLITE_SRC)
-	@[ -d $(SQLITE_VERSION) ] || tar -xzf $<
-	@cd $(SQLITE_VERSION) && \
-	 CFLAGS="$(filter-out -ffast-math,$(CFLAGS)) -DSQLITE_OS_OTHER=1" ./configure --disable-shared --disable-threadsafe --disable-dynamic-extensions --host=arm-none-eabi --prefix=$(PORTLIBS_PATH)/armv6k
-	# avoid building sqlite3 shell
-	@$(MAKE) -C $(SQLITE_VERSION) libsqlite3.la
-
 # tinyxml2 uses cmake
 $(TINYXML): $(TINYXML_SRC)
 	@[ -d $(TINYXML_VERSION) ] || tar -xzf $<
@@ -315,7 +297,6 @@ install:
 	@[ ! -d $(LIBPNG_VERSION) ] || $(MAKE) -C $(LIBPNG_VERSION) install
 	@[ ! -d $(LIBXMP_LITE_VERSION) ] || $(MAKE) -C $(LIBXMP_LITE_VERSION) install
 	@[ ! -d $(MBED_VERSION) ] || $(MAKE) -C $(MBED_VERSION) install
-	@[ ! -d $(SQLITE_VERSION) ] || $(MAKE) -C $(SQLITE_VERSION) install-libLTLIBRARIES install-data
 	@[ ! -d $(TINYXML_VERSION) ] || $(MAKE) -C $(TINYXML_VERSION) install
 	@[ ! -d $(TREMOR_VERSION) ] || $(MAKE) -C $(TREMOR_VERSION) install
 	@[ ! -d $(XZ_VERSION) ] || $(MAKE) -C $(XZ_VERSION) install
@@ -333,7 +314,6 @@ clean:
 	@$(RM) -r $(LIBPNG_VERSION)
 	@$(RM) -r $(LIBXMP_LITE_VERSION)
 	@$(RM) -r $(MBED_VERSION)
-	@$(RM) -r $(SQLITE_VERSION)
 	@$(RM) -r $(TINYXML_VERSION)
 	@$(RM) -r $(TREMOR_VERSION)
 	@$(RM) -r $(XZ_VERSION)
