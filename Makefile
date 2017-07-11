@@ -58,11 +58,11 @@ MBED_VERSION          := $(MBED)-2.5.1
 
 MBED_APACHE           := $(MBED)-apache
 MBED_APACHE_SRC       := $(MBED_VERSION)-apache.tgz
-MBED_APACHE_DOWNLOAD  := "https://tls.mbed.org/download/$(MBED_APACHE_DOWNLOAD)"
+MBED_APACHE_DOWNLOAD  := "https://tls.mbed.org/download/$(MBED_APACHE_SRC)"
 
 MBED_GPL              := $(MBED)-gpl
 MBED_GPL_SRC          := $(MBED_VERSION)-gpl.tgz
-MBED_GPL_DOWNLOAD     := "https://tls.mbed.org/download/$(MBED_GPL_DOWNLOAD)"
+MBED_GPL_DOWNLOAD     := "https://tls.mbed.org/download/$(MBED_GPL_SRC)"
 
 TINYXML               := tinyxml2
 TINYXML_VERSION       := $(TINYXML)-3.0.0
