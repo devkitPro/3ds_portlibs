@@ -54,9 +54,15 @@ LIBXMP_LITE_SRC       := $(LIBXMP_LITE_VERSION).tar.gz
 LIBXMP_LITE_DOWNLOAD  := http://sourceforge.net/projects/xmp/files/libxmp/4.3.10/libxmp-lite-4.3.10.tar.gz/download
 
 MBED                  := mbedtls
-MBED_VERSION          := $(MBED)-2.4.0
-MBED_SRC              := $(MBED_VERSION).tgz
-MBED_DOWNLOAD         := "https://tls.mbed.org/download/mbedtls-2.4.0-gpl.tgz"
+MBED_VERSION          := $(MBED)-2.5.1
+
+MBED_APACHE           := $(MBED)-apache
+MBED_APACHE_SRC       := $(MBED_VERSION)-apache.tgz
+MBED_APACHE_DOWNLOAD  := "https://tls.mbed.org/download/$(MBED_APACHE_DOWNLOAD)"
+
+MBED_GPL              := $(MBED)-gpl
+MBED_GPL_SRC          := $(MBED_VERSION)-gpl.tgz
+MBED_GPL_DOWNLOAD     := "https://tls.mbed.org/download/$(MBED_GPL_DOWNLOAD)"
 
 TINYXML               := tinyxml2
 TINYXML_VERSION       := $(TINYXML)-3.0.0
@@ -87,7 +93,13 @@ export CPPFLAGS       := -I$(DEVKITPRO)/libctru/include -I$(PORTLIBS_PATH)/3ds/i
 export LDFLAGS        := -L$(DEVKITPRO)/libctru/lib -L$(PORTLIBS_PATH)/3ds/lib -L$(PORTLIBS_PATH)/armv6k/lib
 export LIBS           := -lctru
 
-.PHONY: all install install-zlib clean download \
+.PHONY: all \
+        install \
+        install-$(ZLIB) \
+        install-$(MBED_APACHE) \
+        install-$(MBED_GPL) \
+        clean \
+        download \
         $(BZIP2) \
         $(FREETYPE) \
         $(GIFLIB) \
@@ -98,7 +110,8 @@ export LIBS           := -lctru
         $(LIBMAD) \
         $(LIBOGG) \
         $(LIBPNG) \
-        $(MBED) \
+        $(MBED_APACHE) \
+        $(MBED_GPL) \
         $(LIBXMP_LITE) \
         $(TINYXML) \
         $(TREMOR) \
@@ -118,13 +131,14 @@ all:
 	@echo "  $(LIBOGG)"
 	@echo "  $(LIBPNG) (requires zlib to be installed)"
 	@echo "  $(LIBXMP_LITE)"
-	@echo "  $(MBED) (requires zlib to be installed)"
+	@echo "  $(MBED_APACHE) (requires zlib to be installed)"
+	@echo "  $(MBED_GPL) (requires zlib to be installed)"
 	@echo "  $(TINYXML)"
 	@echo "  $(TREMOR) (requires $(LIBOGG) to be installed)"
 	@echo "  $(XZ)"
 	@echo "  $(ZLIB)"
 
-download: $(BZIP2_SRC) $(FREETYPE_SRC) $(GIFLIB_SRC) $(JANSSON_SRC) $(LIBCONFIG_SRC) $(LIBEXIF_SRC) $(LIBJPEGTURBO_SRC) $(LIBMAD_SRC) $(LIBOGG_SRC) $(LIBPNG_SRC) $(LIBXMP_LITE_SRC) $(MBED_SRC) $(TINYXML_SRC) $(TREMOR_SRC) $(XZ_SRC) $(ZLIB_SRC)
+download: $(BZIP2_SRC) $(FREETYPE_SRC) $(GIFLIB_SRC) $(JANSSON_SRC) $(LIBCONFIG_SRC) $(LIBEXIF_SRC) $(LIBJPEGTURBO_SRC) $(LIBMAD_SRC) $(LIBOGG_SRC) $(LIBPNG_SRC) $(LIBXMP_LITE_SRC) $(MBED_APACHE_SRC) $(MBED_GPL_SRC) $(TINYXML_SRC) $(TREMOR_SRC) $(XZ_SRC) $(ZLIB_SRC)
 
 DOWNLOAD = wget --no-check-certificate -O "$(1)" "$(2)" || curl -Lo "$(1)" "$(2)"
 
@@ -161,8 +175,11 @@ $(LIBPNG_SRC):
 $(LIBXMP_LITE_SRC):
 	@$(call DOWNLOAD,$@,$(LIBXMP_LITE_DOWNLOAD))
 
-$(MBED_SRC):
-	@$(call DOWNLOAD,$@,$(MBED_DOWNLOAD))
+$(MBED_APACHE_SRC):
+	@$(call DOWNLOAD,$@,$(MBED_APACHE_DOWNLOAD))
+
+$(MBED_GPL_SRC):
+	@$(call DOWNLOAD,$@,$(MBED_GPL_DOWNLOAD))
 
 $(TINYXML_SRC):
 	@$(call DOWNLOAD,$@,$(TINYXML_DOWNLOAD))
@@ -242,17 +259,29 @@ $(LIBXMP_LITE): $(LIBXMP_LITE_SRC)
 	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
 	@$(MAKE) -C $(LIBXMP_LITE_VERSION)
 
-$(MBED): $(MBED_SRC)
-	@[ -d $(MBED_VERSION) ] || tar xzf $<
-	@cd $(MBED_VERSION) && \
-	 patch -Np1 -i ../libmbedtls-2.4.0.patch && \
+$(MBED_APACHE): $(MBED_APACHE_SRC)
+	@[ -d $(MBED_VERSION)-apache ] || tar -xzf $< && mv $(MBED_VERSION) $(MBED_VERSION)-apache
+	@cd $(MBED_VERSION)-apache && \
+	 patch -Np1 -i ../libmbedtls-2.5.1.patch && \
 	 cmake -DCMAKE_SYSTEM_NAME=Generic -DCMAKE_C_COMPILER=$(DEVKITARM)/bin/arm-none-eabi-gcc \
 	 -DCMAKE_CXX_COMPILER=$(DEVKITARM)/bin/arm-none-eabi-g++ \
 	 -DCMAKE_INSTALL_PREFIX=$(PORTLIBS_PATH)/3ds -DCMAKE_C_FLAGS="$(CFLAGS) $(CPPFLAGS)" \
 	 -DCMAKE_CXX_FLAGS="$(CFLAGS) -fno-exceptions -fno-rtti" \
 	 -DZLIB_ROOT="$(PORTLIBS_PATH)/armv6k" \
 	 -DENABLE_ZLIB_SUPPORT=TRUE -DENABLE_TESTING=FALSE -DENABLE_PROGRAMS=FALSE .
-	@$(MAKE) -C $(MBED_VERSION)
+	@$(MAKE) -C $(MBED_VERSION)-apache
+
+$(MBED_GPL): $(MBED_GPL_SRC)
+	@[ -d $(MBED_VERSION)-gpl ] || tar -xzf $< && mv $(MBED_VERSION) $(MBED_VERSION)-gpl
+	@cd $(MBED_VERSION)-gpl && \
+	 patch -Np1 -i ../libmbedtls-2.5.1.patch && \
+	 cmake -DCMAKE_SYSTEM_NAME=Generic -DCMAKE_C_COMPILER=$(DEVKITARM)/bin/arm-none-eabi-gcc \
+	 -DCMAKE_CXX_COMPILER=$(DEVKITARM)/bin/arm-none-eabi-g++ \
+	 -DCMAKE_INSTALL_PREFIX=$(PORTLIBS_PATH)/3ds -DCMAKE_C_FLAGS="$(CFLAGS) $(CPPFLAGS)" \
+	 -DCMAKE_CXX_FLAGS="$(CFLAGS) -fno-exceptions -fno-rtti" \
+	 -DZLIB_ROOT="$(PORTLIBS_PATH)/armv6k" \
+	 -DENABLE_ZLIB_SUPPORT=TRUE -DENABLE_TESTING=FALSE -DENABLE_PROGRAMS=FALSE .
+	@$(MAKE) -C $(MBED_VERSION)-gpl
 
 # tinyxml2 uses cmake
 $(TINYXML): $(TINYXML_SRC)
@@ -277,8 +306,14 @@ $(ZLIB): $(ZLIB_SRC)
 	 CHOST=arm-none-eabi ./configure --static --prefix=$(PORTLIBS_PATH)/armv6k
 	@$(MAKE) -C $(ZLIB_VERSION)
 
-install-zlib:
+install-$(ZLIB):
 	@$(MAKE) -C $(ZLIB_VERSION) install
+
+install-$(MBED_APACHE):
+	@$(MAKE) -C $(MBED_VERSION)-apache install
+
+install-$(MBED_GPL):
+	@$(MAKE) -C $(MBED_VERSION)-gpl install
 
 install:
 	@if [ -d $(BZIP2_VERSION) ]; then \
@@ -297,7 +332,6 @@ install:
 	@[ ! -d $(LIBOGG_VERSION) ] || $(MAKE) -C $(LIBOGG_VERSION) install
 	@[ ! -d $(LIBPNG_VERSION) ] || $(MAKE) -C $(LIBPNG_VERSION) install
 	@[ ! -d $(LIBXMP_LITE_VERSION) ] || $(MAKE) -C $(LIBXMP_LITE_VERSION) install
-	@[ ! -d $(MBED_VERSION) ] || $(MAKE) -C $(MBED_VERSION) install
 	@[ ! -d $(TINYXML_VERSION) ] || $(MAKE) -C $(TINYXML_VERSION) install
 	@[ ! -d $(TREMOR_VERSION) ] || $(MAKE) -C $(TREMOR_VERSION) install
 	@[ ! -d $(XZ_VERSION) ] || $(MAKE) -C $(XZ_VERSION) install
@@ -314,7 +348,8 @@ clean:
 	@$(RM) -r $(LIBOGG_VERSION)
 	@$(RM) -r $(LIBPNG_VERSION)
 	@$(RM) -r $(LIBXMP_LITE_VERSION)
-	@$(RM) -r $(MBED_VERSION)
+	@$(RM) -r $(MBED_VERSION)-apache
+	@$(RM) -r $(MBED_VERSION)-gpl
 	@$(RM) -r $(TINYXML_VERSION)
 	@$(RM) -r $(TREMOR_VERSION)
 	@$(RM) -r $(XZ_VERSION)
