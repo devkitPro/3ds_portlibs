@@ -98,7 +98,7 @@ export LIBS           := -lctru
         $(GIFLIB) \
         $(JANSSON) \
         $(LIBCONFIG) \
-        $(LIBCURL) \
+        $(CURL) \
         $(LIBEXIF) \
         $(LIBJPEGTURBO) \
         $(LIBMAD) \
