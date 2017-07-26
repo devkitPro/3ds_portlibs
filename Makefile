@@ -21,7 +21,7 @@ JANSSON_DOWNLOAD      := http://www.digip.org/jansson/releases/jansson-2.10.tar.
 LIBCONFIG             := libconfig
 LIBCONFIG_VERSION     := $(LIBCONFIG)-1.5
 LIBCONFIG_SRC         := $(LIBCONFIG_VERSION).tar.gz
-LIBCONFIG_DOWNLOAD    := "http://www.hyperrealm.com/libconfig/libconfig-1.5.tar.gz"
+LIBCONFIG_DOWNLOAD    := "https://github.com/ahoischen/libconfig/releases/download/v1.5/libconfig-1.5.tar.gz"
 
 LIBEXIF               := libexif
 LIBEXIF_VERSION       := $(LIBEXIF)-0.6.21
