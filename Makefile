@@ -21,7 +21,7 @@ JANSSON_DOWNLOAD      := http://www.digip.org/jansson/releases/jansson-2.10.tar.
 LIBCONFIG             := libconfig
 LIBCONFIG_VERSION     := $(LIBCONFIG)-1.5
 LIBCONFIG_SRC         := $(LIBCONFIG_VERSION).tar.gz
-LIBCONFIG_DOWNLOAD    := "http://www.hyperrealm.com/libconfig/libconfig-1.5.tar.gz"
+LIBCONFIG_DOWNLOAD    := "https://github.com/hyperrealm/libconfig/archive/v1.5.tar.gz"
 
 LIBEXIF               := libexif
 LIBEXIF_VERSION       := $(LIBEXIF)-0.6.21
@@ -219,6 +219,7 @@ $(JANSSON): $(JANSSON_SRC)
 $(LIBCONFIG): $(LIBCONFIG_SRC)
 	@[ -d $(LIBCONFIG_VERSION) ] || tar -xzf $<
 	@cd $(LIBCONFIG_VERSION) && \
+	 autoreconf -i && \
 	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-cxx --disable-examples
 	@$(MAKE) -C $(LIBCONFIG_VERSION)/lib
 
