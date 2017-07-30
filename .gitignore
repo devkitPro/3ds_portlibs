@@ -1,9 +1,13 @@
+bzip2-*
 freetype-*
 jansson-*
 libexif-*
 libjpeg-*
+libogg-*
 libpng-*
 libxmp-*
+mbedtls*
 sqlite-*
 tinyxml2-*
+tremor-*
 zlib-*
