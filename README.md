@@ -28,7 +28,6 @@ Currently supports the following portlibs:
 * libmad
 * libogg
 * libpng (requires zlib)
-* libxml2
 * libxmp-lite
 * mbedtls (requires zlib) (without net component)
 * sqlite
