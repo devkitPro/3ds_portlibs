@@ -1,0 +1,86 @@
+diff -Naur mbedtls-2.4.0/include/mbedtls/config.h mbedtls-2.4.0-mod/include/mbedtls/config.h
+--- mbedtls-2.4.0/include/mbedtls/config.h	2016-10-17 19:34:43.000000000 -0400
++++ mbedtls-2.4.0-mod/include/mbedtls/config.h	2016-12-26 15:28:25.000000000 -0500
+@@ -315,7 +315,7 @@
+  *
+  * Uncomment to use your own hardware entropy collector.
+  */
+-//#define MBEDTLS_ENTROPY_HARDWARE_ALT
++#define MBEDTLS_ENTROPY_HARDWARE_ALT
+ 
+ /**
+  * \def MBEDTLS_AES_ROM_TABLES
+@@ -807,7 +807,7 @@
+  *
+  * Uncomment this macro to disable the built-in platform entropy functions.
+  */
+-//#define MBEDTLS_NO_PLATFORM_ENTROPY
++#define MBEDTLS_NO_PLATFORM_ENTROPY
+ 
+ /**
+  * \def MBEDTLS_ENTROPY_FORCE_SHA256
+@@ -924,7 +924,7 @@
+  *
+  * Enable the checkup functions (*_self_test).
+  */
+-#define MBEDTLS_SELF_TEST
++//#define MBEDTLS_SELF_TEST
+ 
+ /**
+  * \def MBEDTLS_SHA256_SMALLER
+@@ -1967,7 +1967,7 @@
+  *
+  * This module provides networking routines.
+  */
+-#define MBEDTLS_NET_C
++//#define MBEDTLS_NET_C
+ 
+ /**
+  * \def MBEDTLS_OID_C
+@@ -2347,7 +2347,7 @@
+  *
+  * This module is used by the HAVEGE random number generator.
+  */
+-#define MBEDTLS_TIMING_C
++//#define MBEDTLS_TIMING_C
+
+ /**
+  * \def MBEDTLS_VERSION_C
+
+diff -Naur mbedtls-2.4.0/library/timing.c mbedtls-2.4.0-mod/library/timing.c
+--- mbedtls-2.4.0/library/timing.c	2016-10-17 19:34:43.000000000 -0400
++++ mbedtls-2.4.0-mod/library/timing.c	2016-12-26 15:29:17.000000000 -0500
+@@ -316,7 +316,7 @@
+ {
+     mbedtls_timing_alarmed = 0;
+     signal( SIGALRM, sighandler );
+-    alarm( seconds );
++    // alarm( seconds );
+ }
+ 
+ #endif /* _WIN32 && !EFIX64 && !EFI32 */
+
+diff -Naur mbedtls-2.4.0/library/entropy.c mbedtls-2.4.0-mod/library/entropy.c
+--- mbedtls-2.4.0/library/entropy.c	2016-10-17 19:34:43.000000000 -0400
++++ mbedtls-2.4.0-mod/library/entropy.c	2016-12-26 16:12:21.000000000 -0500
+@@ -119,6 +119,20 @@
+ #endif /* MBEDTLS_NO_DEFAULT_ENTROPY_SOURCES */
+ }
+ 
++#define LIBCTRU                            
++#ifdef LIBCTRU
++    #include <3ds.h>
++    int mbedtls_hardware_poll( void *data,
++                               unsigned char *output, size_t len, size_t *olen )
++    {
++        (void)(data);
++        sslcGenerateRandomData(output, len);
++        if(olen)
++            *olen = len;
++        return 0;
++    }
++#endif
++
+ void mbedtls_entropy_free( mbedtls_entropy_context *ctx )
+ {
+ #if defined(MBEDTLS_HAVEGE_C)
