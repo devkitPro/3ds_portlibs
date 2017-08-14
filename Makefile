@@ -69,10 +69,11 @@ TINYXML_VERSION       := $(TINYXML)-3.0.0
 TINYXML_SRC           := $(TINYXML_VERSION).tar.gz
 TINYXML_DOWNLOAD      := https://github.com/leethomason/tinyxml2/archive/3.0.0.tar.gz
 
+# Tremor Low Memory Branch
 TREMOR                := tremor
-TREMOR_VERSION        := $(TREMOR)-2a1a8f6
+TREMOR_VERSION        := $(TREMOR)-293fd1c
 TREMOR_SRC            := $(TREMOR_VERSION).tar.gz
-TREMOR_DOWNLOAD       := https://git.xiph.org/?p=tremor.git;a=snapshot;h=2a1a8f621e500fdf0749f115e2206f82919560a3;sf=tgz
+TREMOR_DOWNLOAD       := https://git.xiph.org/?p=tremor.git;a=snapshot;h=293fd1c04f9d4489be6d4b2b1ca8698f2f902e8e;sf=tgz
 
 XZ                    := xz
 XZ_VERSION            := $(XZ)-5.2.2
