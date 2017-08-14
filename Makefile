@@ -80,6 +80,11 @@ XZ_VERSION            := $(XZ)-5.2.2
 XZ_SRC                := $(XZ_VERSION).tar.xz
 XZ_DOWNLOAD           := "http://tukaani.org/xz/xz-5.2.2.tar.xz"
 
+MIKMOD                := libmikmod
+MIKMOD_VERSION        := $(MIKMOD)-3.3.11.1
+MIKMOD_SRC            := $(MIKMOD_VERSION).tar.gz
+MIKMOD_DOWNLOAD       := http://sourceforge.net/projects/mikmod/files/libmikmod/3.3.11.1/libmikmod-3.3.11.1.tar.gz/download
+
 ZLIB                  := zlib
 ZLIB_VERSION          := $(ZLIB)-1.2.8
 ZLIB_SRC              := $(ZLIB_VERSION).tar.gz
@@ -118,6 +123,7 @@ export LIBS           := -lctru
         $(TINYXML) \
         $(TREMOR) \
         $(XZ) \
+        $(MIKMOD) \
         $(ZLIB)
 
 all:
@@ -138,9 +144,10 @@ all:
 	@echo "  $(TINYXML)"
 	@echo "  $(TREMOR) (requires $(LIBOGG) to be installed)"
 	@echo "  $(XZ)"
+	@echo "  $(MIKMOD)"
 	@echo "  $(ZLIB)"
 
-download: $(BZIP2_SRC) $(FREETYPE_SRC) $(GIFLIB_SRC) $(JANSSON_SRC) $(LIBCONFIG_SRC) $(LIBEXIF_SRC) $(LIBJPEGTURBO_SRC) $(LIBMAD_SRC) $(LIBOGG_SRC) $(LIBPNG_SRC) $(LIBXMP_LITE_SRC) $(MBED_APACHE_SRC) $(MBED_GPL_SRC) $(TINYXML_SRC) $(TREMOR_SRC) $(XZ_SRC) $(ZLIB_SRC)
+download: $(BZIP2_SRC) $(FREETYPE_SRC) $(GIFLIB_SRC) $(JANSSON_SRC) $(LIBCONFIG_SRC) $(LIBEXIF_SRC) $(LIBJPEGTURBO_SRC) $(LIBMAD_SRC) $(LIBOGG_SRC) $(LIBPNG_SRC) $(LIBXMP_LITE_SRC) $(MBED_APACHE_SRC) $(MBED_GPL_SRC) $(TINYXML_SRC) $(TREMOR_SRC) $(XZ_SRC) $(MIKMOD_SRC) $(ZLIB_SRC)
 
 DOWNLOAD = wget --no-check-certificate -O "$(1)" "$(2)" || curl -Lo "$(1)" "$(2)"
 
@@ -191,6 +198,9 @@ $(TREMOR_SRC):
 
 $(XZ_SRC):
 	@$(call DOWNLOAD,$@,$(XZ_DOWNLOAD))
+
+$(MIKMOD_SRC):
+	$(call DOWNLOAD,$@,$(MIKMOD_DOWNLOAD))
 
 $(ZLIB_SRC):
 	@$(call DOWNLOAD,$@,$(ZLIB_DOWNLOAD))
@@ -303,6 +313,12 @@ $(XZ): $(XZ_SRC)
 	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static --disable-xz --enable-threads=no
 	@$(MAKE) -C $(XZ_VERSION)
 
+$(MIKMOD): $(MIKMOD_SRC)
+	@[ -d $(MIKMOD_VERSION) ] || tar -xzf $<
+	@cd $(MIKMOD_VERSION) && \
+	 ./configure --prefix=$(MIKMOD_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static 
+	@$(MAKE) -C $(MIKMOD_VERSION)
+
 $(ZLIB): $(ZLIB_SRC)
 	@[ -d $(ZLIB_VERSION) ] || tar -xzf $<
 	@cd $(ZLIB_VERSION) && \
@@ -337,6 +353,7 @@ install:
 	@[ ! -d $(LIBXMP_LITE_VERSION) ] || $(MAKE) -C $(LIBXMP_LITE_VERSION) install
 	@[ ! -d $(TINYXML_VERSION) ] || $(MAKE) -C $(TINYXML_VERSION) install
 	@[ ! -d $(TREMOR_VERSION) ] || $(MAKE) -C $(TREMOR_VERSION) install
+	@[ ! -d $(MIKMOD_VERSION) ] || $(MAKE) -C $(MIKMOD_VERSION) install
 	@[ ! -d $(XZ_VERSION) ] || $(MAKE) -C $(XZ_VERSION) install
 
 clean:
@@ -356,4 +373,5 @@ clean:
 	@$(RM) -r $(TINYXML_VERSION)
 	@$(RM) -r $(TREMOR_VERSION)
 	@$(RM) -r $(XZ_VERSION)
+	@$(RM) -r $(MIKMOD_VERSION)
 	@$(RM) -r $(ZLIB_VERSION)
