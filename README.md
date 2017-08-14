@@ -32,6 +32,7 @@ Currently supports the following portlibs:
 * mbedtls (requires zlib) (without net component)
 * sqlite
 * tinyxml2
-* tremor (requires libogg)
+* tremor - low mwmory branch (requires libogg)
 * xz
+* libmikmod
 * zlib
