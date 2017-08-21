@@ -301,6 +301,9 @@ $(TINYXML): $(TINYXML_SRC)
 	@[ -d $(TINYXML_VERSION) ] || tar -xzf $<
 	@cd $(TINYXML_VERSION) && cmake -DCMAKE_SYSTEM_NAME=Generic -DCMAKE_C_COMPILER=$(DEVKITARM)/bin/arm-none-eabi-gcc -DCMAKE_CXX_COMPILER=$(DEVKITARM)/bin/arm-none-eabi-g++ -DCMAKE_INSTALL_PREFIX=$(PORTLIBS_PATH)/armv6k -DCMAKE_C_FLAGS="$(CFLAGS)" -DCMAKE_CXX_FLAGS="$(CFLAGS) -fno-exceptions -fno-rtti" . && make
 
+install-$(TINYXML): $(TINYXML)
+	@$(MAKE) -C $(TINYXML_VERSION) install
+
 $(TREMOR): $(TREMOR_SRC)
 	@[ -d $(TREMOR_VERSION) ] || tar -xzf $<
 	@cd $(TREMOR_VERSION) && \
