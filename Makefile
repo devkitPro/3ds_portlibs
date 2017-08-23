@@ -92,7 +92,6 @@ ZLIB_DOWNLOAD         := http://prdownloads.sourceforge.net/libpng/zlib-1.2.8.ta
 
 export PORTLIBS_PATH  := $(DEVKITPRO)/portlibs
 export PATH           := $(DEVKITARM)/bin:$(PORTLIBS_PATH)/3ds/bin:$(PORTLIBS_PATH)/armv6k/bin:$(PATH)
-export PKG_CONFIG     := $(PWD)/arm-none-eabi-pkg-config
 export ACLOCAL_FLAGS  := -I  $(DEVKITPRO)/portlibs/3ds/share/aclocal -I $(DEVKITPRO)/portlibs/armv6k/share/aclocal
 
 export CFLAGS         := -march=armv6k -mtune=mpcore -mfloat-abi=hard -mtp=soft -O3 -mword-relocations -ffunction-sections
@@ -126,7 +125,7 @@ export LIBS           := -lctru
         $(MIKMOD) \
         $(ZLIB)
 
-all:
+all: $(DEVKITPRO)/portlibs/armv6k/bin/arm-none-eabi-pkg-config $(DEVKITPRO)/portlibs/3ds/bin/arm-none-eabi-pkg-config
 	@echo "Please choose one of the following targets:"
 	@echo "  $(BZIP2)"
 	@echo "  $(FREETYPE) (requires zlib to be installed)"
@@ -146,6 +145,7 @@ all:
 	@echo "  $(XZ)"
 	@echo "  $(MIKMOD)"
 	@echo "  $(ZLIB)"
+
 
 download: $(BZIP2_SRC) $(FREETYPE_SRC) $(GIFLIB_SRC) $(JANSSON_SRC) $(LIBCONFIG_SRC) $(LIBEXIF_SRC) $(LIBJPEGTURBO_SRC) $(LIBMAD_SRC) $(LIBOGG_SRC) $(LIBPNG_SRC) $(LIBXMP_LITE_SRC) $(MBED_APACHE_SRC) $(MBED_GPL_SRC) $(TINYXML_SRC) $(TREMOR_SRC) $(XZ_SRC) $(MIKMOD_SRC) $(ZLIB_SRC)
 
@@ -355,6 +355,19 @@ install:
 	@[ ! -d $(TREMOR_VERSION) ] || $(MAKE) -C $(TREMOR_VERSION) install
 	@[ ! -d $(MIKMOD_VERSION) ] || $(MAKE) -C $(MIKMOD_VERSION) install
 	@[ ! -d $(XZ_VERSION) ] || $(MAKE) -C $(XZ_VERSION) install
+
+$(DEVKITPRO)/portlibs/armv6k/bin:
+	mkdir -p $@
+
+$(DEVKITPRO)/portlibs/3ds/bin:
+	mkdir -p $@
+
+$(DEVKITPRO)/portlibs/armv6k/bin/arm-none-eabi-pkg-config : $(DEVKITPRO)/portlibs/armv6k/bin armv6k-arm-none-eabi-pkg-config
+	cp armv6k-arm-none-eabi-pkg-config $@
+
+
+$(DEVKITPRO)/portlibs/3ds/bin/arm-none-eabi-pkg-config : $(DEVKITPRO)/portlibs/3ds/bin 3ds-arm-none-eabi-pkg-config
+	cp 3ds-arm-none-eabi-pkg-config $@
 
 clean:
 	@$(RM) -r $(BZIP2_VERSION)
