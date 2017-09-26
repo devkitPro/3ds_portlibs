@@ -241,7 +241,7 @@ $(JANSSON): $(JANSSON_SRC)
 $(LIBARCHIVE): $(LIBARCHIVE_SRC)
 	@[ -d $(LIBARCHIVE_VERSION) ] || tar -xzf $<
 	@cd $(LIBARCHIVE_VERSION) && \
-	patch -Np1 -i ../libarchive.patch && \
+	patch -Np1 -i ../libarchive-3.1.2.patch && \
 	./configure --prefix=$(PORTLIBS) --host=arm-none-eabi --disable-shared --enable-static --without-nettle --without-openssl --without-xml2 --without-expat --without-iconv --disable-bsdtar --disable-bsdcpio --disable-acl
 	@$(MAKE) -C $(LIBARCHIVE_VERSION)
 
