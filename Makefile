@@ -18,6 +18,11 @@ JANSSON_VERSION       := $(JANSSON)-2.10
 JANSSON_SRC           := $(JANSSON_VERSION).tar.bz2
 JANSSON_DOWNLOAD      := http://www.digip.org/jansson/releases/jansson-2.10.tar.bz2
 
+LIBARCHIVE            := libarchive
+LIBARCHIVE_VERSION    := $(LIBARCHIVE)-3.1.2
+LIBARCHIVE_SRC        := $(LIBARCHIVE_VERSION).tar.gz
+LIBARCHIVE_DOWNLOAD   := "http://www.libarchive.org/downloads/libarchive-3.1.2.tar.gz"
+
 LIBCONFIG             := libconfig
 LIBCONFIG_VERSION     := $(LIBCONFIG)-1.5
 LIBCONFIG_SRC         := $(LIBCONFIG_VERSION).tar.gz
@@ -110,6 +115,7 @@ export LIBS           := -lctru
         $(FREETYPE) \
         $(GIFLIB) \
         $(JANSSON) \
+        $(LIBARCHIVE) \
         $(LIBCONFIG) \
         $(LIBEXIF) \
         $(LIBJPEGTURBO) \
@@ -131,6 +137,7 @@ all: $(DEVKITPRO)/portlibs/armv6k/bin/arm-none-eabi-pkg-config $(DEVKITPRO)/port
 	@echo "  $(FREETYPE) (requires zlib to be installed)"
 	@echo "  $(GIFLIB)"
 	@echo "  $(JANSSON)"
+	@echo "  $(LIBARCHIVE) (requires zlib, $(BZIP2), and $(XZ) to be installed)"
 	@echo "  $(LIBCONFIG)"
 	@echo "  $(LIBEXIF)"
 	@echo "  $(LIBJPEGTURBO)"
@@ -147,7 +154,7 @@ all: $(DEVKITPRO)/portlibs/armv6k/bin/arm-none-eabi-pkg-config $(DEVKITPRO)/port
 	@echo "  $(ZLIB)"
 
 
-download: $(BZIP2_SRC) $(FREETYPE_SRC) $(GIFLIB_SRC) $(JANSSON_SRC) $(LIBCONFIG_SRC) $(LIBEXIF_SRC) $(LIBJPEGTURBO_SRC) $(LIBMAD_SRC) $(LIBOGG_SRC) $(LIBPNG_SRC) $(LIBXMP_LITE_SRC) $(MBED_APACHE_SRC) $(MBED_GPL_SRC) $(TINYXML_SRC) $(TREMOR_SRC) $(XZ_SRC) $(MIKMOD_SRC) $(ZLIB_SRC)
+download: $(BZIP2_SRC) $(FREETYPE_SRC) $(GIFLIB_SRC) $(JANSSON_SRC) $(LIBARCHIVE_SRC) $(LIBCONFIG_SRC) $(LIBEXIF_SRC) $(LIBJPEGTURBO_SRC) $(LIBMAD_SRC) $(LIBOGG_SRC) $(LIBPNG_SRC) $(LIBXMP_LITE_SRC) $(MBED_APACHE_SRC) $(MBED_GPL_SRC) $(TINYXML_SRC) $(TREMOR_SRC) $(XZ_SRC) $(MIKMOD_SRC) $(ZLIB_SRC)
 
 DOWNLOAD = wget --no-check-certificate -O "$(1)" "$(2)" || curl -Lo "$(1)" "$(2)"
 
@@ -162,6 +169,9 @@ $(GIFLIB_SRC):
 
 $(JANSSON_SRC):
 	@$(call DOWNLOAD,$@,$(JANSSON_DOWNLOAD))
+
+$(LIBARCHIVE_SRC):
+	@$(call DOWNLOAD,$@,$(LIBARCHIVE_DOWNLOAD))
 
 $(LIBCONFIG_SRC):
 	@$(call DOWNLOAD,$@,$(LIBCONFIG_DOWNLOAD))
@@ -227,6 +237,13 @@ $(JANSSON): $(JANSSON_SRC)
 	@cd $(JANSSON_VERSION) && \
 	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
 	@$(MAKE) -C $(JANSSON_VERSION)
+
+$(LIBARCHIVE): $(LIBARCHIVE_SRC)
+	@[ -d $(LIBARCHIVE_VERSION) ] || tar -xzf $<
+	@cd $(LIBARCHIVE_VERSION) && \
+	patch -Np1 -i ../libarchive.patch && \
+	./configure --prefix=$(PORTLIBS) --host=arm-none-eabi --disable-shared --enable-static --without-nettle --without-openssl --without-xml2 --without-expat --without-iconv --disable-bsdtar --disable-bsdcpio --disable-acl
+	@$(MAKE) -C $(LIBARCHIVE_VERSION)
 
 $(LIBCONFIG): $(LIBCONFIG_SRC)
 	@[ -d $(LIBCONFIG_VERSION) ] || tar -xzf $<
@@ -344,6 +361,7 @@ install:
 	@[ ! -d $(FREETYPE_VERSION) ] || $(MAKE) -C $(FREETYPE_VERSION) install
 	@[ ! -d $(GIFLIB_VERSION) ] || $(MAKE) -C $(GIFLIB_VERSION) install
 	@[ ! -d $(JANSSON_VERSION) ] || $(MAKE) -C $(JANSSON_VERSION) install
+	@[ ! -d $(LIBARCHIVE_VERSION) ] || $(MAKE) -C $(LIBARCHIVE_VERSION) install
 	@[ ! -d $(LIBCONFIG_VERSION) ] || $(MAKE) -C $(LIBCONFIG_VERSION)/lib install
 	@[ ! -d $(LIBEXIF_VERSION) ] || $(MAKE) -C $(LIBEXIF_VERSION) install
 	@[ ! -d $(LIBJPEGTURBO_VERSION) ] || $(MAKE) -C $(LIBJPEGTURBO_VERSION) install
@@ -374,6 +392,7 @@ clean:
 	@$(RM) -r $(FREETYPE_VERSION)
 	@$(RM) -r $(GIFLIB_VERSION)
 	@$(RM) -r $(JANSSON_VERSION)
+	@$(RM) -r $(LIBARCHIVE_VERSION)
 	@$(RM) -r $(LIBCONFIG_VERSION)
 	@$(RM) -r $(LIBEXIF_VERSION)
 	@$(RM) -r $(LIBJPEGTURBO_VERSION)
