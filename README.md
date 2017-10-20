@@ -22,6 +22,7 @@ Currently supports the following portlibs:
 * freetype (requires zlib)
 * giflib
 * jansson
+* libarchive
 * libconfig
 * libexif
 * libjpeg-turbo
