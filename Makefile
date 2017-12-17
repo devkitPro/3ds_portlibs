@@ -49,7 +49,7 @@ LIBOGG_SRC            := $(LIBOGG_VERSION).tar.xz
 LIBOGG_DOWNLOAD       := "http://downloads.xiph.org/releases/ogg/libogg-1.3.2.tar.xz"
 
 LIBOPUS               := libopus
-LIBOPUS_VERSION       := $(LIBOPUS)-1.2.1
+LIBOPUS_VERSION       := opus-1.2.1
 LIBOPUS_SRC           := $(LIBOPUS_VERSION).tar.gz
 LIBOPUS_DOWNLOAD      := https://archive.mozilla.org/pub/opus/opus-1.2.1.tar.gz
 
