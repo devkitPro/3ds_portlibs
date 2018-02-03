@@ -19,6 +19,7 @@ complete ports and will not actually do anything useful without further work.
 Currently supports the following portlibs:
 
 * bzip2
+* curl (requires zlib for compression, mbedtls for SSL)
 * freetype (requires zlib)
 * giflib
 * jansson

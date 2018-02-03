@@ -1,0 +1,162 @@
+diff -Naur curl-7.58.0.orig/lib/connect.c curl-7.58.0/lib/connect.c
+--- curl-7.58.0.orig/lib/connect.c	2017-12-13 00:21:39.000000000 -0800
++++ curl-7.58.0/lib/connect.c	2018-02-03 15:22:52.088238000 -0800
+@@ -111,6 +111,7 @@
+ {
+   int optval = data->set.tcp_keepalive?1:0;
+ 
++#if defined(SO_KEEPALIVE) // Does not exist on 3DS.
+   /* only set IDLE and INTVL if setting KEEPALIVE is successful */
+   if(setsockopt(sockfd, SOL_SOCKET, SO_KEEPALIVE,
+         (void *)&optval, sizeof(optval)) < 0) {
+@@ -160,6 +161,9 @@
+ #endif
+ #endif
+   }
++#else
++  infof(data, "SO_KEEPALIVE not supported", sockfd);
++#endif
+ }
+ 
+ static CURLcode
+@@ -484,7 +488,7 @@
+ static bool verifyconnect(curl_socket_t sockfd, int *error)
+ {
+   bool rc = TRUE;
+-#ifdef SO_ERROR
++#if 0 // SO_ERROR does not function properly on 3DS.
+   int err = 0;
+   curl_socklen_t errSize = sizeof(err);
+ 
+diff -Naur curl-7.58.0.orig/lib/curl_addrinfo.c curl-7.58.0/lib/curl_addrinfo.c
+--- curl-7.58.0.orig/lib/curl_addrinfo.c	2018-01-22 00:55:10.000000000 -0800
++++ curl-7.58.0/lib/curl_addrinfo.c	2018-02-03 15:22:52.106091600 -0800
+@@ -148,8 +148,8 @@
+       continue;
+ 
+     /* ignore elements with bogus address size */
+-    if((size_t)ai->ai_addrlen < ss_size)
+-      continue;
++    //if((size_t)ai->ai_addrlen < ss_size) // Mismatch on 3DS: ai_addrlen = 8, sizeof(struct sockaddr_in) = 16
++    //  continue;
+ 
+     ca = malloc(sizeof(Curl_addrinfo));
+     if(!ca) {
+@@ -175,7 +175,7 @@
+       free(ca);
+       break;
+     }
+-    memcpy(ca->ai_addr, ai->ai_addr, ss_size);
++    memcpy(ca->ai_addr, ai->ai_addr, ai->ai_addrlen);
+ 
+     if(ai->ai_canonname != NULL) {
+       ca->ai_canonname = strdup(ai->ai_canonname);
+diff -Naur curl-7.58.0.orig/lib/vtls/mbedtls.c curl-7.58.0/lib/vtls/mbedtls.c
+--- curl-7.58.0.orig/lib/vtls/mbedtls.c	2017-12-02 15:33:22.000000000 -0800
++++ curl-7.58.0/lib/vtls/mbedtls.c	2018-02-03 15:26:34.413225500 -0800
+@@ -32,11 +32,6 @@
+ #ifdef USE_MBEDTLS
+ 
+ #include <mbedtls/version.h>
+-#if MBEDTLS_VERSION_NUMBER >= 0x02040000
+-#include <mbedtls/net_sockets.h>
+-#else
+-#include <mbedtls/net.h>
+-#endif
+ #include <mbedtls/ssl.h>
+ #include <mbedtls/certs.h>
+ #include <mbedtls/x509.h>
+@@ -46,6 +41,8 @@
+ #include <mbedtls/ctr_drbg.h>
+ #include <mbedtls/sha256.h>
+ 
++#include <fcntl.h>
++
+ #include "urldata.h"
+ #include "sendf.h"
+ #include "inet_pton.h"
+@@ -61,6 +58,84 @@
+ #include "curl_memory.h"
+ #include "memdebug.h"
+ 
++// net module is not available on 3DS; include necessary bits here instead.
++#define MBEDTLS_ERR_NET_RECV_FAILED -0x004C
++#define MBEDTLS_ERR_NET_SEND_FAILED -0x004E
++#define MBEDTLS_ERR_NET_CONN_RESET -0x0050
++#define MBEDTLS_ERR_NET_INVALID_CONTEXT -0x0045
++
++typedef struct {
++    int fd;
++} mbedtls_net_context;
++
++static int net_would_block(const mbedtls_net_context *ctx) {
++    int err = errno;
++    if((fcntl(ctx->fd, F_GETFL) & O_NONBLOCK) != O_NONBLOCK) {
++        errno = err;
++        return 0;
++    }
++
++    switch(errno = err) {
++#if defined EAGAIN
++        case EAGAIN:
++#endif
++#if defined EWOULDBLOCK && EWOULDBLOCK != EAGAIN
++        case EWOULDBLOCK:
++#endif
++            return 1;
++    }
++
++    return 0;
++}
++
++int mbedtls_net_recv(void *ctx, unsigned char *buf, size_t len) {
++    int ret;
++    int fd = ((mbedtls_net_context*) ctx)->fd;
++
++    if(fd < 0)
++        return MBEDTLS_ERR_NET_INVALID_CONTEXT;
++
++    ret = read(fd, buf, len);
++    if(ret < 0) {
++        if(net_would_block(ctx) != 0)
++            return MBEDTLS_ERR_SSL_WANT_READ;
++
++        if(errno == EPIPE || errno == ECONNRESET)
++            return MBEDTLS_ERR_NET_CONN_RESET;
++
++        if(errno == EINTR)
++            return MBEDTLS_ERR_SSL_WANT_READ;
++
++        return MBEDTLS_ERR_NET_RECV_FAILED;
++    }
++
++    return ret;
++}
++
++int mbedtls_net_send(void *ctx, const unsigned char *buf, size_t len) {
++    int ret;
++    int fd = ((mbedtls_net_context*) ctx)->fd;
++
++    if(fd < 0)
++        return MBEDTLS_ERR_NET_INVALID_CONTEXT;
++
++    ret = write(fd, buf, len);
++    if(ret < 0) {
++        if(net_would_block( ctx ) != 0)
++            return MBEDTLS_ERR_SSL_WANT_WRITE;
++
++        if(errno == EPIPE || errno == ECONNRESET)
++            return MBEDTLS_ERR_NET_CONN_RESET;
++
++        if(errno == EINTR)
++            return MBEDTLS_ERR_SSL_WANT_WRITE;
++
++        return MBEDTLS_ERR_NET_SEND_FAILED;
++    }
++
++    return ret;
++}
++
+ struct ssl_backend_data {
+   mbedtls_ctr_drbg_context ctr_drbg;
+   mbedtls_entropy_context entropy;

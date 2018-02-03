@@ -3,6 +3,11 @@ BZIP2_VERSION         := $(BZIP2)-1.0.6
 BZIP2_SRC             := $(BZIP2_VERSION).tar.gz
 BZIP2_DOWNLOAD        := "http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz"
 
+CURL                  := curl
+CURL_VERSION          := $(CURL)-7.58.0
+CURL_SRC              := $(CURL_VERSION).tar.bz2
+CURL_DOWNLOAD         := https://github.com/curl/curl/releases/download/curl-7_58_0/curl-7.58.0.tar.bz2
+
 FREETYPE              := freetype
 FREETYPE_VERSION      := $(FREETYPE)-2.6.2
 FREETYPE_SRC          := $(FREETYPE_VERSION).tar.bz2
@@ -112,6 +117,7 @@ export LIBS           := -lctru
         clean \
         download \
         $(BZIP2) \
+        $(CURL) \
         $(FREETYPE) \
         $(GIFLIB) \
         $(JANSSON) \
@@ -134,6 +140,7 @@ export LIBS           := -lctru
 all: $(DEVKITPRO)/portlibs/armv6k/bin/arm-none-eabi-pkg-config $(DEVKITPRO)/portlibs/3ds/bin/arm-none-eabi-pkg-config
 	@echo "Please choose one of the following targets:"
 	@echo "  $(BZIP2)"
+	@echo "  $(CURL) (requires zlib for compression, mbedtls for SSL)"
 	@echo "  $(FREETYPE) (requires zlib to be installed)"
 	@echo "  $(GIFLIB)"
 	@echo "  $(JANSSON)"
@@ -154,12 +161,15 @@ all: $(DEVKITPRO)/portlibs/armv6k/bin/arm-none-eabi-pkg-config $(DEVKITPRO)/port
 	@echo "  $(ZLIB)"
 
 
-download: $(BZIP2_SRC) $(FREETYPE_SRC) $(GIFLIB_SRC) $(JANSSON_SRC) $(LIBARCHIVE_SRC) $(LIBCONFIG_SRC) $(LIBEXIF_SRC) $(LIBJPEGTURBO_SRC) $(LIBMAD_SRC) $(LIBOGG_SRC) $(LIBPNG_SRC) $(LIBXMP_LITE_SRC) $(MBED_APACHE_SRC) $(MBED_GPL_SRC) $(TINYXML_SRC) $(TREMOR_SRC) $(XZ_SRC) $(MIKMOD_SRC) $(ZLIB_SRC)
+download: $(BZIP2_SRC) $(CURL_SRC) $(FREETYPE_SRC) $(GIFLIB_SRC) $(JANSSON_SRC) $(LIBARCHIVE_SRC) $(LIBCONFIG_SRC) $(LIBEXIF_SRC) $(LIBJPEGTURBO_SRC) $(LIBMAD_SRC) $(LIBOGG_SRC) $(LIBPNG_SRC) $(LIBXMP_LITE_SRC) $(MBED_APACHE_SRC) $(MBED_GPL_SRC) $(TINYXML_SRC) $(TREMOR_SRC) $(XZ_SRC) $(MIKMOD_SRC) $(ZLIB_SRC)
 
 DOWNLOAD = wget --no-check-certificate -O "$(1)" "$(2)" || curl -Lo "$(1)" "$(2)"
 
 $(BZIP2_SRC):
 	@$(call DOWNLOAD,$@,$(BZIP2_DOWNLOAD))
+
+$(CURL_SRC):
+	@$(call DOWNLOAD,$@,$(CURL_DOWNLOAD))
 
 $(FREETYPE_SRC):
 	$(call DOWNLOAD,$@,$(FREETYPE_DOWNLOAD))
@@ -219,6 +229,13 @@ $(BZIP2): $(BZIP2_SRC)
 	@[ -d $(BZIP2_VERSION) ] || tar -xzf $<
 	@cd $(BZIP2_VERSION)
 	@$(MAKE) -C $(BZIP2_VERSION) CC=arm-none-eabi-gcc AR=arm-none-eabi-ar RANLIB=arm-none-eabi-ranlib CPPFLAGS="$(CPPFLAGS)" CFLAGS="-D_FILE_OFFSET_BITS=64 -Winline $(CFLAGS)" libbz2.a
+
+$(CURL): $(CURL_SRC)
+	@[ -d $(CURL_VERSION) ] || tar -xjf $<
+	@cd $(CURL_VERSION) && \
+	 patch -Np1 -i ../libcurl-7.58.0.patch && \
+	 ./configure CFLAGS="$(CFLAGS) $(CPPFLAGS)" CPPFLAGS="$(CPPFLAGS)" --prefix=$(PORTLIBS_PATH)/3ds --host=arm-none-eabi --disable-shared --enable-static --disable-ipv6 --disable-ntlm-wb --disable-threaded-resolver --with-mbedtls
+	@$(MAKE) -C $(CURL_VERSION)/lib
 
 $(FREETYPE): $(FREETYPE_SRC)
 	@[ -d $(FREETYPE_VERSION) ] || tar -xjf $<
@@ -358,6 +375,7 @@ install:
 		cp -fv $(BZIP2_VERSION)/libbz2.a $(PORTLIBS_PATH)/armv6k/lib; \
 		chmod a+r $(PORTLIBS_PATH)/armv6k/lib/libbz2.a; \
 	fi
+	@[ ! -d $(CURL_VERSION) ] || ($(MAKE) -C $(CURL_VERSION)/lib install && $(MAKE) -C $(CURL_VERSION)/include install)
 	@[ ! -d $(FREETYPE_VERSION) ] || $(MAKE) -C $(FREETYPE_VERSION) install
 	@[ ! -d $(GIFLIB_VERSION) ] || $(MAKE) -C $(GIFLIB_VERSION) install
 	@[ ! -d $(JANSSON_VERSION) ] || $(MAKE) -C $(JANSSON_VERSION) install
@@ -389,6 +407,7 @@ $(DEVKITPRO)/portlibs/3ds/bin/arm-none-eabi-pkg-config : $(DEVKITPRO)/portlibs/3
 
 clean:
 	@$(RM) -r $(BZIP2_VERSION)
+	@$(RM) -r $(CURL_VERSION)
 	@$(RM) -r $(FREETYPE_VERSION)
 	@$(RM) -r $(GIFLIB_VERSION)
 	@$(RM) -r $(JANSSON_VERSION)
