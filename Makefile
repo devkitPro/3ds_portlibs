@@ -59,7 +59,7 @@ LIBXMP_LITE_SRC       := $(LIBXMP_LITE_VERSION).tar.gz
 LIBXMP_LITE_DOWNLOAD  := http://sourceforge.net/projects/xmp/files/libxmp/4.3.10/libxmp-lite-4.3.10.tar.gz/download
 
 MBED                  := mbedtls
-MBED_VERSION          := $(MBED)-2.5.1
+MBED_VERSION          := $(MBED)-2.7.0
 
 MBED_APACHE           := $(MBED)-apache
 MBED_APACHE_SRC       := $(MBED_VERSION)-apache.tgz
@@ -290,9 +290,9 @@ $(LIBXMP_LITE): $(LIBXMP_LITE_SRC)
 	@$(MAKE) -C $(LIBXMP_LITE_VERSION)
 
 $(MBED_APACHE): $(MBED_APACHE_SRC)
-	@[ -d $(MBED_VERSION)-apache ] || tar -xzf $< && mv $(MBED_VERSION) $(MBED_VERSION)-apache
+	@[ -d $(MBED_VERSION)-apache ] || { tar -xzf $< && mv $(MBED_VERSION) $(MBED_VERSION)-apache; }
 	@cd $(MBED_VERSION)-apache && \
-	 patch -Np1 -i ../libmbedtls-2.5.1.patch && \
+	 patch -Np1 -i ../libmbedtls-2.7.0.patch && \
 	 cmake -DCMAKE_SYSTEM_NAME=Generic -DCMAKE_C_COMPILER=$(DEVKITARM)/bin/arm-none-eabi-gcc \
 	 -DCMAKE_CXX_COMPILER=$(DEVKITARM)/bin/arm-none-eabi-g++ \
 	 -DCMAKE_INSTALL_PREFIX=$(PORTLIBS_PATH)/3ds -DCMAKE_C_FLAGS="$(CFLAGS) $(CPPFLAGS)" \
@@ -302,9 +302,9 @@ $(MBED_APACHE): $(MBED_APACHE_SRC)
 	@$(MAKE) -C $(MBED_VERSION)-apache
 
 $(MBED_GPL): $(MBED_GPL_SRC)
-	@[ -d $(MBED_VERSION)-gpl ] || tar -xzf $< && mv $(MBED_VERSION) $(MBED_VERSION)-gpl
+	@[ -d $(MBED_VERSION)-gpl ] || { tar -xzf $< && mv $(MBED_VERSION) $(MBED_VERSION)-gpl; }
 	@cd $(MBED_VERSION)-gpl && \
-	 patch -Np1 -i ../libmbedtls-2.5.1.patch && \
+	 patch -Np1 -i ../libmbedtls-2.7.0.patch && \
 	 cmake -DCMAKE_SYSTEM_NAME=Generic -DCMAKE_C_COMPILER=$(DEVKITARM)/bin/arm-none-eabi-gcc \
 	 -DCMAKE_CXX_COMPILER=$(DEVKITARM)/bin/arm-none-eabi-g++ \
 	 -DCMAKE_INSTALL_PREFIX=$(PORTLIBS_PATH)/3ds -DCMAKE_C_FLAGS="$(CFLAGS) $(CPPFLAGS)" \
