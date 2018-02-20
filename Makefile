@@ -53,6 +53,11 @@ LIBOGG_VERSION        := $(LIBOGG)-1.3.2
 LIBOGG_SRC            := $(LIBOGG_VERSION).tar.xz
 LIBOGG_DOWNLOAD       := "http://downloads.xiph.org/releases/ogg/libogg-1.3.2.tar.xz"
 
+LIBOPUS               := libopus
+LIBOPUS_VERSION       := opus-1.2.1
+LIBOPUS_SRC           := $(LIBOPUS_VERSION).tar.gz
+LIBOPUS_DOWNLOAD      := https://archive.mozilla.org/pub/opus/opus-1.2.1.tar.gz
+
 LIBPNG                := libpng
 LIBPNG_VERSION        := $(LIBPNG)-1.6.21
 LIBPNG_SRC            := $(LIBPNG_VERSION).tar.xz
@@ -73,6 +78,11 @@ MBED_APACHE_DOWNLOAD  := "https://tls.mbed.org/download/$(MBED_APACHE_SRC)"
 MBED_GPL              := $(MBED)-gpl
 MBED_GPL_SRC          := $(MBED_VERSION)-gpl.tgz
 MBED_GPL_DOWNLOAD     := "https://tls.mbed.org/download/$(MBED_GPL_SRC)"
+
+OPUSFILE              := opusfile
+OPUSFILE_VERSION      := $(OPUSFILE)-0.9
+OPUSFILE_SRC          := $(OPUSFILE_VER).tar.gz
+OPUSFILE_DOWNLOAD     := https://downloads.xiph.org/releases/opus/opusfile-0.9.tar.gz
 
 TINYXML               := tinyxml2
 TINYXML_VERSION       := $(TINYXML)-3.0.0
@@ -126,9 +136,11 @@ export LIBS           := -lctru
         $(LIBJPEGTURBO) \
         $(LIBMAD) \
         $(LIBOGG) \
+		$(LIBOPUS) \
         $(LIBPNG) \
         $(MBED_APACHE) \
         $(MBED_GPL) \
+		$(OPUSFILE) \
         $(LIBXMP_LITE) \
         $(TINYXML) \
         $(TREMOR) \
@@ -149,10 +161,12 @@ all: $(DEVKITPRO)/portlibs/armv6k/bin/arm-none-eabi-pkg-config $(DEVKITPRO)/port
 	@echo "  $(LIBJPEGTURBO)"
 	@echo "  $(LIBMAD)"
 	@echo "  $(LIBOGG)"
+	@echo "  $(LIBOPUS)"
 	@echo "  $(LIBPNG) (requires zlib to be installed)"
 	@echo "  $(LIBXMP_LITE)"
 	@echo "  $(MBED_APACHE) (requires zlib to be installed)"
 	@echo "  $(MBED_GPL) (requires zlib to be installed)"
+	@echo "  $(OPUSFILE) (requires $(LIBOPUS) and $(LIBOGG) to be installed)"
 	@echo "  $(TINYXML)"
 	@echo "  $(TREMOR) (requires $(LIBOGG) to be installed)"
 	@echo "  $(XZ)"
@@ -160,7 +174,7 @@ all: $(DEVKITPRO)/portlibs/armv6k/bin/arm-none-eabi-pkg-config $(DEVKITPRO)/port
 	@echo "  $(ZLIB)"
 
 
-download: $(BZIP2_SRC) $(CURL_SRC) $(FREETYPE_SRC) $(GIFLIB_SRC) $(JANSSON_SRC) $(LIBARCHIVE_SRC) $(LIBCONFIG_SRC) $(LIBEXIF_SRC) $(LIBJPEGTURBO_SRC) $(LIBMAD_SRC) $(LIBOGG_SRC) $(LIBPNG_SRC) $(LIBXMP_LITE_SRC) $(MBED_APACHE_SRC) $(MBED_GPL_SRC) $(TINYXML_SRC) $(TREMOR_SRC) $(XZ_SRC) $(MIKMOD_SRC) $(ZLIB_SRC)
+download: $(BZIP2_SRC) $(CURL_SRC) $(FREETYPE_SRC) $(GIFLIB_SRC) $(JANSSON_SRC) $(LIBARCHIVE_SRC) $(LIBCONFIG_SRC) $(LIBEXIF_SRC) $(LIBJPEGTURBO_SRC) $(LIBMAD_SRC) $(LIBOGG_SRC) $(LIBOPUS_SRC) $(LIBPNG_SRC) $(LIBXMP_LITE_SRC) $(MBED_APACHE_SRC) $(MBED_GPL_SRC) $(OPUSFILE_SRC) $(TINYXML_SRC) $(TREMOR_SRC) $(XZ_SRC) $(MIKMOD_SRC) $(ZLIB_SRC)
 
 DOWNLOAD = wget --no-check-certificate -O "$(1)" "$(2)" || curl -Lo "$(1)" "$(2)"
 
@@ -197,6 +211,9 @@ $(LIBMAD_SRC):
 $(LIBOGG_SRC):
 	@$(call DOWNLOAD,$@,$(LIBOGG_DOWNLOAD))
 
+$(LIBOPUS_SRC):
+	@$(call DOWNLOAD,$@,$(LIBOPUS_DOWNLOAD))
+
 $(LIBPNG_SRC):
 	@$(call DOWNLOAD,$@,$(LIBPNG_DOWNLOAD))
 
@@ -208,6 +225,9 @@ $(MBED_APACHE_SRC):
 
 $(MBED_GPL_SRC):
 	@$(call DOWNLOAD,$@,$(MBED_GPL_DOWNLOAD))
+
+$(OPUSFILE_SRC):
+	@$(call DOWNLOAD,$@,$(OPUSFILE_DOWNLOAD))
 
 $(TINYXML_SRC):
 	@$(call DOWNLOAD,$@,$(TINYXML_DOWNLOAD))
@@ -293,6 +313,12 @@ $(LIBOGG): $(LIBOGG_SRC)
 	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
 	@$(MAKE) -C $(LIBOGG_VERSION)
 
+$(LIBOPUS): $(LIBOPUS_SRC)
+	@[ -d $(LIBOPUS_VERSION) ] || tar -xzf $<
+	@cd $(LIBOPUS_VERSION) && \
+	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
+	@$(MAKE) -C $(LIBOPUS_VERSION)
+
 $(LIBPNG): $(LIBPNG_SRC)
 	@[ -d $(LIBPNG_VERSION) ] || tar -xJf $<
 	@cd $(LIBPNG_VERSION) && \
@@ -328,6 +354,13 @@ $(MBED_GPL): $(MBED_GPL_SRC)
 	 -DZLIB_ROOT="$(PORTLIBS_PATH)/armv6k" \
 	 -DENABLE_ZLIB_SUPPORT=TRUE -DENABLE_TESTING=FALSE -DENABLE_PROGRAMS=FALSE .
 	@$(MAKE) -C $(MBED_VERSION)-gpl
+
+$(OPUSFILE): $(OPUSFILE_SRC)
+	@[ -d $(OPUSFILE_VERSION) ] || tar -xzf $<
+	@cd $(OPUSFILE_VERSION) && \
+	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
+	@$(MAKE) -C $(OPUSFILE_VERSION)
+
 
 # tinyxml2 uses cmake
 $(TINYXML): $(TINYXML_SRC)
@@ -384,8 +417,10 @@ install:
 	@[ ! -d $(LIBJPEGTURBO_VERSION) ] || $(MAKE) -C $(LIBJPEGTURBO_VERSION) install
 	@[ ! -d $(LIBMAD_VERSION) ] || $(MAKE) -C $(LIBMAD_VERSION) install
 	@[ ! -d $(LIBOGG_VERSION) ] || $(MAKE) -C $(LIBOGG_VERSION) install
+	@[ ! -d $(LIBOPUS_VERSION) ] || $(MAKE) -C $(LIBOPUS_VERSION) install
 	@[ ! -d $(LIBPNG_VERSION) ] || $(MAKE) -C $(LIBPNG_VERSION) install
 	@[ ! -d $(LIBXMP_LITE_VERSION) ] || $(MAKE) -C $(LIBXMP_LITE_VERSION) install
+	@[ ! -d $(OPUSFILE_VERSION) ] || $(MAKE) -C $(OPUSFILE_VERSION) install
 	@[ ! -d $(TINYXML_VERSION) ] || $(MAKE) -C $(TINYXML_VERSION) install
 	@[ ! -d $(TREMOR_VERSION) ] || $(MAKE) -C $(TREMOR_VERSION) install
 	@[ ! -d $(MIKMOD_VERSION) ] || $(MAKE) -C $(MIKMOD_VERSION) install
