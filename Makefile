@@ -3,6 +3,11 @@ BZIP2_VERSION         := $(BZIP2)-1.0.6
 BZIP2_SRC             := $(BZIP2_VERSION).tar.gz
 BZIP2_DOWNLOAD        := "http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz"
 
+CURL                  := curl
+CURL_VERSION          := $(CURL)-7.58.0
+CURL_SRC              := $(CURL_VERSION).tar.bz2
+CURL_DOWNLOAD         := https://github.com/curl/curl/releases/download/$(subst .,_,$(CURL_VERSION))/$(CURL_SRC)
+
 FREETYPE              := freetype
 FREETYPE_VERSION      := $(FREETYPE)-2.6.2
 FREETYPE_SRC          := $(FREETYPE_VERSION).tar.bz2
@@ -64,7 +69,7 @@ LIBXMP_LITE_SRC       := $(LIBXMP_LITE_VERSION).tar.gz
 LIBXMP_LITE_DOWNLOAD  := http://sourceforge.net/projects/xmp/files/libxmp/4.3.10/libxmp-lite-4.3.10.tar.gz/download
 
 MBED                  := mbedtls
-MBED_VERSION          := $(MBED)-2.5.1
+MBED_VERSION          := $(MBED)-2.7.0
 
 MBED_APACHE           := $(MBED)-apache
 MBED_APACHE_SRC       := $(MBED_VERSION)-apache.tgz
@@ -146,6 +151,7 @@ export LIBS           := -lctru
 all: $(DEVKITPRO)/portlibs/armv6k/bin/arm-none-eabi-pkg-config $(DEVKITPRO)/portlibs/3ds/bin/arm-none-eabi-pkg-config
 	@echo "Please choose one of the following targets:"
 	@echo "  $(BZIP2)"
+	@echo "  $(CURL) (requires zlib and mbedtls to be installed)"
 	@echo "  $(FREETYPE) (requires zlib to be installed)"
 	@echo "  $(GIFLIB)"
 	@echo "  $(JANSSON)"
@@ -168,12 +174,15 @@ all: $(DEVKITPRO)/portlibs/armv6k/bin/arm-none-eabi-pkg-config $(DEVKITPRO)/port
 	@echo "  $(ZLIB)"
 
 
-download: $(BZIP2_SRC) $(FREETYPE_SRC) $(GIFLIB_SRC) $(JANSSON_SRC) $(LIBARCHIVE_SRC) $(LIBCONFIG_SRC) $(LIBEXIF_SRC) $(LIBJPEGTURBO_SRC) $(LIBMAD_SRC) $(LIBOGG_SRC) $(LIBOPUS_SRC) $(LIBPNG_SRC) $(LIBXMP_LITE_SRC) $(MBED_APACHE_SRC) $(MBED_GPL_SRC) $(OPUSFILE_SRC) $(TINYXML_SRC) $(TREMOR_SRC) $(XZ_SRC) $(MIKMOD_SRC) $(ZLIB_SRC)
+download: $(BZIP2_SRC) $(CURL_SRC) $(FREETYPE_SRC) $(GIFLIB_SRC) $(JANSSON_SRC) $(LIBARCHIVE_SRC) $(LIBCONFIG_SRC) $(LIBEXIF_SRC) $(LIBJPEGTURBO_SRC) $(LIBMAD_SRC) $(LIBOGG_SRC) $(LIBOPUS_SRC) $(LIBPNG_SRC) $(LIBXMP_LITE_SRC) $(MBED_APACHE_SRC) $(MBED_GPL_SRC) $(OPUSFILE_SRC) $(TINYXML_SRC) $(TREMOR_SRC) $(XZ_SRC) $(MIKMOD_SRC) $(ZLIB_SRC)
 
 DOWNLOAD = wget --no-check-certificate -O "$(1)" "$(2)" || curl -Lo "$(1)" "$(2)"
 
 $(BZIP2_SRC):
 	@$(call DOWNLOAD,$@,$(BZIP2_DOWNLOAD))
+
+$(CURL_SRC):
+	@$(call DOWNLOAD,$@,$(CURL_DOWNLOAD))
 
 $(FREETYPE_SRC):
 	$(call DOWNLOAD,$@,$(FREETYPE_DOWNLOAD))
@@ -239,6 +248,13 @@ $(BZIP2): $(BZIP2_SRC)
 	@[ -d $(BZIP2_VERSION) ] || tar -xzf $<
 	@cd $(BZIP2_VERSION)
 	@$(MAKE) -C $(BZIP2_VERSION) CC=arm-none-eabi-gcc AR=arm-none-eabi-ar RANLIB=arm-none-eabi-ranlib CPPFLAGS="$(CPPFLAGS)" CFLAGS="-D_FILE_OFFSET_BITS=64 -Winline $(CFLAGS)" libbz2.a
+
+$(CURL): $(CURL_SRC)
+	@[ -d $(CURL_VERSION) ] || tar -xjf $<
+	@cd $(CURL_VERSION) && \
+	 patch -Np1 -i ../curl-7.58.0.patch && \
+	 ./configure CFLAGS="$(CFLAGS)" CPPFLAGS="$(CPPFLAGS)" --prefix=$(PORTLIBS_PATH)/3ds --host=arm-none-eabi --disable-shared --enable-static --disable-ipv6 --disable-unix-sockets --disable-manual --disable-ntlm-wb --disable-threaded-resolver --with-mbedtls=$(PORTLIBS_PATH)/3ds
+	@$(MAKE) -C $(CURL_VERSION)/lib
 
 $(FREETYPE): $(FREETYPE_SRC)
 	@[ -d $(FREETYPE_VERSION) ] || tar -xjf $<
@@ -316,9 +332,9 @@ $(LIBXMP_LITE): $(LIBXMP_LITE_SRC)
 	@$(MAKE) -C $(LIBXMP_LITE_VERSION)
 
 $(MBED_APACHE): $(MBED_APACHE_SRC)
-	@[ -d $(MBED_VERSION)-apache ] || tar -xzf $< && mv $(MBED_VERSION) $(MBED_VERSION)-apache
+	@[ -d $(MBED_VERSION)-apache ] || { tar -xzf $< && mv $(MBED_VERSION) $(MBED_VERSION)-apache; }
 	@cd $(MBED_VERSION)-apache && \
-	 patch -Np1 -i ../libmbedtls-2.5.1.patch && \
+	 patch -Np1 -i ../libmbedtls-2.7.0.patch && \
 	 cmake -DCMAKE_SYSTEM_NAME=Generic -DCMAKE_C_COMPILER=$(DEVKITARM)/bin/arm-none-eabi-gcc \
 	 -DCMAKE_CXX_COMPILER=$(DEVKITARM)/bin/arm-none-eabi-g++ \
 	 -DCMAKE_INSTALL_PREFIX=$(PORTLIBS_PATH)/3ds -DCMAKE_C_FLAGS="$(CFLAGS) $(CPPFLAGS)" \
@@ -328,9 +344,9 @@ $(MBED_APACHE): $(MBED_APACHE_SRC)
 	@$(MAKE) -C $(MBED_VERSION)-apache
 
 $(MBED_GPL): $(MBED_GPL_SRC)
-	@[ -d $(MBED_VERSION)-gpl ] || tar -xzf $< && mv $(MBED_VERSION) $(MBED_VERSION)-gpl
+	@[ -d $(MBED_VERSION)-gpl ] || { tar -xzf $< && mv $(MBED_VERSION) $(MBED_VERSION)-gpl; }
 	@cd $(MBED_VERSION)-gpl && \
-	 patch -Np1 -i ../libmbedtls-2.5.1.patch && \
+	 patch -Np1 -i ../libmbedtls-2.7.0.patch && \
 	 cmake -DCMAKE_SYSTEM_NAME=Generic -DCMAKE_C_COMPILER=$(DEVKITARM)/bin/arm-none-eabi-gcc \
 	 -DCMAKE_CXX_COMPILER=$(DEVKITARM)/bin/arm-none-eabi-g++ \
 	 -DCMAKE_INSTALL_PREFIX=$(PORTLIBS_PATH)/3ds -DCMAKE_C_FLAGS="$(CFLAGS) $(CPPFLAGS)" \
@@ -391,6 +407,7 @@ install:
 		cp -fv $(BZIP2_VERSION)/libbz2.a $(PORTLIBS_PATH)/armv6k/lib; \
 		chmod a+r $(PORTLIBS_PATH)/armv6k/lib/libbz2.a; \
 	fi
+	@[ ! -d $(CURL_VERSION) ] || { $(MAKE) -C $(CURL_VERSION)/lib install && $(MAKE) -C $(CURL_VERSION)/include install; }
 	@[ ! -d $(FREETYPE_VERSION) ] || $(MAKE) -C $(FREETYPE_VERSION) install
 	@[ ! -d $(GIFLIB_VERSION) ] || $(MAKE) -C $(GIFLIB_VERSION) install
 	@[ ! -d $(JANSSON_VERSION) ] || $(MAKE) -C $(JANSSON_VERSION) install
@@ -424,6 +441,7 @@ $(DEVKITPRO)/portlibs/3ds/bin/arm-none-eabi-pkg-config : $(DEVKITPRO)/portlibs/3
 
 clean:
 	@$(RM) -r $(BZIP2_VERSION)
+	@$(RM) -r $(CURL_VERSION)
 	@$(RM) -r $(FREETYPE_VERSION)
 	@$(RM) -r $(GIFLIB_VERSION)
 	@$(RM) -r $(JANSSON_VERSION)
