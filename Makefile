@@ -1,7 +1,7 @@
 BZIP2                 := bzip2
 BZIP2_VERSION         := $(BZIP2)-1.0.6
 BZIP2_SRC             := $(BZIP2_VERSION).tar.gz
-BZIP2_DOWNLOAD        := "http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz"
+BZIP2_DOWNLOAD        := http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz
 
 CURL                  := curl
 CURL_VERSION          := $(CURL)-7.58.0
@@ -16,7 +16,7 @@ FREETYPE_DOWNLOAD     := http://download.savannah.gnu.org/releases/freetype/free
 GIFLIB                := giflib
 GIFLIB_VERSION        := $(GIFLIB)-5.1.1
 GIFLIB_SRC            := $(GIFLIB_VERSION).tar.bz2
-GIFLIB_DOWNLOAD       := "http://sourceforge.net/projects/giflib/files/giflib-5.1.1.tar.bz2"
+GIFLIB_DOWNLOAD       := http://sourceforge.net/projects/giflib/files/giflib-5.1.1.tar.bz2
 
 JANSSON               := jansson
 JANSSON_VERSION       := $(JANSSON)-2.10
@@ -26,12 +26,12 @@ JANSSON_DOWNLOAD      := http://www.digip.org/jansson/releases/jansson-2.10.tar.
 LIBARCHIVE            := libarchive
 LIBARCHIVE_VERSION    := $(LIBARCHIVE)-3.1.2
 LIBARCHIVE_SRC        := $(LIBARCHIVE_VERSION).tar.gz
-LIBARCHIVE_DOWNLOAD   := "http://www.libarchive.org/downloads/libarchive-3.1.2.tar.gz"
+LIBARCHIVE_DOWNLOAD   := http://www.libarchive.org/downloads/libarchive-3.1.2.tar.gz
 
 LIBCONFIG             := libconfig
 LIBCONFIG_VERSION     := $(LIBCONFIG)-1.5
 LIBCONFIG_SRC         := $(LIBCONFIG_VERSION).tar.gz
-LIBCONFIG_DOWNLOAD    := "https://github.com/hyperrealm/libconfig/archive/v1.5.tar.gz"
+LIBCONFIG_DOWNLOAD    := https://github.com/hyperrealm/libconfig/archive/v1.5.tar.gz
 
 LIBEXIF               := libexif
 LIBEXIF_VERSION       := $(LIBEXIF)-0.6.21
@@ -46,12 +46,12 @@ LIBJPEGTURBO_DOWNLOAD := http://sourceforge.net/projects/libjpeg-turbo/files/1.4
 LIBMAD                := libmad
 LIBMAD_VERSION        := $(LIBMAD)-0.15.1b
 LIBMAD_SRC            := $(LIBMAD_VERSION).tar.gz
-LIBMAD_DOWNLOAD       := "http://sourceforge.net/projects/mad/files/libmad/0.15.1b/libmad-0.15.1b.tar.gz"
+LIBMAD_DOWNLOAD       := http://sourceforge.net/projects/mad/files/libmad/0.15.1b/libmad-0.15.1b.tar.gz
 
 LIBOGG                := libogg
 LIBOGG_VERSION        := $(LIBOGG)-1.3.2
 LIBOGG_SRC            := $(LIBOGG_VERSION).tar.xz
-LIBOGG_DOWNLOAD       := "http://downloads.xiph.org/releases/ogg/libogg-1.3.2.tar.xz"
+LIBOGG_DOWNLOAD       := http://downloads.xiph.org/releases/ogg/libogg-1.3.2.tar.xz
 
 LIBOPUS               := libopus
 LIBOPUS_VERSION       := opus-1.2.1
@@ -73,11 +73,11 @@ MBED_VERSION          := $(MBED)-2.7.0
 
 MBED_APACHE           := $(MBED)-apache
 MBED_APACHE_SRC       := $(MBED_VERSION)-apache.tgz
-MBED_APACHE_DOWNLOAD  := "https://tls.mbed.org/download/$(MBED_APACHE_SRC)"
+MBED_APACHE_DOWNLOAD  := https://tls.mbed.org/download/$(MBED_APACHE_SRC)
 
 MBED_GPL              := $(MBED)-gpl
 MBED_GPL_SRC          := $(MBED_VERSION)-gpl.tgz
-MBED_GPL_DOWNLOAD     := "https://tls.mbed.org/download/$(MBED_GPL_SRC)"
+MBED_GPL_DOWNLOAD     := https://tls.mbed.org/download/$(MBED_GPL_SRC)
 
 OPUSFILE              := opusfile
 OPUSFILE_VERSION      := $(OPUSFILE)-0.9
@@ -98,7 +98,7 @@ TREMOR_DOWNLOAD       := https://git.xiph.org/?p=tremor.git;a=snapshot;h=293fd1c
 XZ                    := xz
 XZ_VERSION            := $(XZ)-5.2.2
 XZ_SRC                := $(XZ_VERSION).tar.xz
-XZ_DOWNLOAD           := "http://tukaani.org/xz/xz-5.2.2.tar.xz"
+XZ_DOWNLOAD           := http://tukaani.org/xz/xz-5.2.2.tar.xz
 
 MIKMOD                := libmikmod
 MIKMOD_VERSION        := $(MIKMOD)-3.3.11.1
@@ -127,6 +127,7 @@ export LIBS           := -lctru
         clean \
         download \
         $(BZIP2) \
+        $(CURL) \
         $(FREETYPE) \
         $(GIFLIB) \
         $(JANSSON) \
@@ -136,11 +137,11 @@ export LIBS           := -lctru
         $(LIBJPEGTURBO) \
         $(LIBMAD) \
         $(LIBOGG) \
-		$(LIBOPUS) \
+        $(LIBOPUS) \
         $(LIBPNG) \
         $(MBED_APACHE) \
         $(MBED_GPL) \
-		$(OPUSFILE) \
+        $(OPUSFILE) \
         $(LIBXMP_LITE) \
         $(TINYXML) \
         $(TREMOR) \
@@ -382,7 +383,7 @@ $(XZ): $(XZ_SRC)
 $(MIKMOD): $(MIKMOD_SRC)
 	@[ -d $(MIKMOD_VERSION) ] || tar -xzf $<
 	@cd $(MIKMOD_VERSION) && \
-	 ./configure --prefix=$(MIKMOD_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
+	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
 	@$(MAKE) -C $(MIKMOD_VERSION)
 
 $(ZLIB): $(ZLIB_SRC)
@@ -451,10 +452,12 @@ clean:
 	@$(RM) -r $(LIBJPEGTURBO_VERSION)
 	@$(RM) -r $(LIBMAD_VERSION)
 	@$(RM) -r $(LIBOGG_VERSION)
+	@$(RM) -r $(LIBOPUS_VERSION)
 	@$(RM) -r $(LIBPNG_VERSION)
 	@$(RM) -r $(LIBXMP_LITE_VERSION)
 	@$(RM) -r $(MBED_VERSION)-apache
 	@$(RM) -r $(MBED_VERSION)-gpl
+	@$(RM) -r $(OPUSFILE_VERSION)
 	@$(RM) -r $(TINYXML_VERSION)
 	@$(RM) -r $(TREMOR_VERSION)
 	@$(RM) -r $(XZ_VERSION)
