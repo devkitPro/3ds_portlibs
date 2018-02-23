@@ -1,3 +1,7 @@
+INSTALL                = /usr/bin/install -c
+INSTALL_DATA           = $(INSTALL) -Dm644
+INSTALL_DIR            = $(INSTALL) -dm755
+
 BZIP2                 := bzip2
 BZIP2_VERSION         := $(BZIP2)-1.0.6
 BZIP2_SRC             := $(BZIP2_VERSION).tar.gz
@@ -149,7 +153,7 @@ export LIBS           := -lctru
         $(MIKMOD) \
         $(ZLIB)
 
-all: $(DEVKITPRO)/portlibs/armv6k/bin/arm-none-eabi-pkg-config $(DEVKITPRO)/portlibs/3ds/bin/arm-none-eabi-pkg-config
+all: $(DESTDIR)$(DEVKITPRO)/portlibs/armv6k/bin/arm-none-eabi-pkg-config $(DESTDIR)$(DEVKITPRO)/portlibs/3ds/bin/arm-none-eabi-pkg-config
 	@echo "Please choose one of the following targets:"
 	@echo "  $(BZIP2)"
 	@echo "  $(CURL) (requires zlib and mbedtls to be installed)"
@@ -403,10 +407,8 @@ install-$(MBED_GPL):
 
 install:
 	@if [ -d $(BZIP2_VERSION) ]; then \
-		cp -fv $(BZIP2_VERSION)/bzlib.h $(PORTLIBS_PATH)/armv6k/include; \
-		chmod a+r $(PORTLIBS_PATH)/armv6k/include/bzlib.h; \
-		cp -fv $(BZIP2_VERSION)/libbz2.a $(PORTLIBS_PATH)/armv6k/lib; \
-		chmod a+r $(PORTLIBS_PATH)/armv6k/lib/libbz2.a; \
+		$(INSTALL_DATA) $(BZIP2_VERSION)/bzlib.h $(DESTDIR)$(PORTLIBS_PATH)/armv6k/include/bzlib.h; \
+		$(INSTALL_DATA) $(BZIP2_VERSION)/libbz2.a $(DESTDIR)$(PORTLIBS_PATH)/armv6k/lib/libbz2.a; \
 	fi
 	@[ ! -d $(CURL_VERSION) ] || { $(MAKE) -C $(CURL_VERSION)/lib install && $(MAKE) -C $(CURL_VERSION)/include install; }
 	@[ ! -d $(FREETYPE_VERSION) ] || $(MAKE) -C $(FREETYPE_VERSION) install
@@ -427,18 +429,17 @@ install:
 	@[ ! -d $(MIKMOD_VERSION) ] || $(MAKE) -C $(MIKMOD_VERSION) install
 	@[ ! -d $(XZ_VERSION) ] || $(MAKE) -C $(XZ_VERSION) install
 
-$(DEVKITPRO)/portlibs/armv6k/bin:
-	mkdir -p $@
+$(DESTDIR)$(DEVKITPRO)/portlibs/armv6k/bin:
+	$(INSTALL_DIR) $@
 
-$(DEVKITPRO)/portlibs/3ds/bin:
-	mkdir -p $@
+$(DESTDIR)$(DEVKITPRO)/portlibs/3ds/bin:
+	$(INSTALL_DIR) $@
 
-$(DEVKITPRO)/portlibs/armv6k/bin/arm-none-eabi-pkg-config : $(DEVKITPRO)/portlibs/armv6k/bin armv6k-arm-none-eabi-pkg-config
-	cp armv6k-arm-none-eabi-pkg-config $@
+$(DESTDIR)$(DEVKITPRO)/portlibs/armv6k/bin/arm-none-eabi-pkg-config : $(DESTDIR)$(DEVKITPRO)/portlibs/armv6k/bin armv6k-arm-none-eabi-pkg-config
+	$(INSTALL_DATA) armv6k-arm-none-eabi-pkg-config $@
 
-
-$(DEVKITPRO)/portlibs/3ds/bin/arm-none-eabi-pkg-config : $(DEVKITPRO)/portlibs/3ds/bin 3ds-arm-none-eabi-pkg-config
-	cp 3ds-arm-none-eabi-pkg-config $@
+$(DESTDIR)$(DEVKITPRO)/portlibs/3ds/bin/arm-none-eabi-pkg-config : $(DESTDIR)$(DEVKITPRO)/portlibs/3ds/bin 3ds-arm-none-eabi-pkg-config
+	$(INSTALL_DATA) 3ds-arm-none-eabi-pkg-config $@
 
 clean:
 	@$(RM) -r $(BZIP2_VERSION)
