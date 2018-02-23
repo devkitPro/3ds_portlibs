@@ -3,116 +3,137 @@ INSTALL_DATA           = $(INSTALL) -Dm644
 INSTALL_DIR            = $(INSTALL) -dm755
 
 BZIP2                 := bzip2
-BZIP2_VERSION         := $(BZIP2)-1.0.6
-BZIP2_SRC             := $(BZIP2_VERSION).tar.gz
-BZIP2_DOWNLOAD        := http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz
+BZIP2_VERSION         := 1.0.6
+BZIP2_SRC             := $(BZIP2)-$(BZIP2_VERSION).tar.gz
+BZIP2_DOWNLOAD        := http://www.bzip.org/$(BZIP2_VERSION)/$(BZIP2_SRC)
+BZIP2_DIR             := $(BZIP2)-$(BZIP2_VERSION)
 
 CURL                  := curl
-CURL_VERSION          := $(CURL)-7.58.0
-CURL_SRC              := $(CURL_VERSION).tar.bz2
-CURL_DOWNLOAD         := https://github.com/curl/curl/releases/download/$(subst .,_,$(CURL_VERSION))/$(CURL_SRC)
+CURL_VERSION          := 7.58.0
+CURL_SRC              := $(CURL)-$(CURL_VERSION).tar.bz2
+CURL_DOWNLOAD         := https://github.com/curl/curl/releases/download/curl-$(subst .,_,$(CURL_VERSION))/$(CURL_SRC)
+CURL_DIR              := $(CURL)-$(CURL_VERSION)
 
 FREETYPE              := freetype
-FREETYPE_VERSION      := $(FREETYPE)-2.6.2
-FREETYPE_SRC          := $(FREETYPE_VERSION).tar.bz2
-FREETYPE_DOWNLOAD     := http://download.savannah.gnu.org/releases/freetype/freetype-2.6.2.tar.bz2
+FREETYPE_VERSION      := 2.6.2
+FREETYPE_SRC          := $(FREETYPE)-$(FREETYPE_VERSION).tar.bz2
+FREETYPE_DOWNLOAD     := http://download.savannah.gnu.org/releases/freetype/$(FREETYPE_SRC)
+FREETYPE_DIR          := $(FREETYPE)-$(FREETYPE_VERSION)
 
 GIFLIB                := giflib
-GIFLIB_VERSION        := $(GIFLIB)-5.1.1
-GIFLIB_SRC            := $(GIFLIB_VERSION).tar.bz2
-GIFLIB_DOWNLOAD       := http://sourceforge.net/projects/giflib/files/giflib-5.1.1.tar.bz2
+GIFLIB_VERSION        := 5.1.1
+GIFLIB_SRC            := $(GIFLIB)-$(GIFLIB_VERSION).tar.bz2
+GIFLIB_DOWNLOAD       := http://sourceforge.net/projects/giflib/files/$(GIFLIB_SRC)
+GIFLIB_DIR            := $(GIFLIB)-$(GIFLIB_VERSION)
 
 JANSSON               := jansson
-JANSSON_VERSION       := $(JANSSON)-2.10
-JANSSON_SRC           := $(JANSSON_VERSION).tar.bz2
-JANSSON_DOWNLOAD      := http://www.digip.org/jansson/releases/jansson-2.10.tar.bz2
+JANSSON_VERSION       := 2.10
+JANSSON_SRC           := $(JANSSON)-$(JANSSON_VERSION).tar.bz2
+JANSSON_DOWNLOAD      := http://www.digip.org/jansson/releases/$(JANSSON_SRC)
+JANSSON_DIR           := $(JANSSON)-$(JANSSON_VERSION)
 
 LIBARCHIVE            := libarchive
-LIBARCHIVE_VERSION    := $(LIBARCHIVE)-3.1.2
-LIBARCHIVE_SRC        := $(LIBARCHIVE_VERSION).tar.gz
-LIBARCHIVE_DOWNLOAD   := http://www.libarchive.org/downloads/libarchive-3.1.2.tar.gz
+LIBARCHIVE_VERSION    := 3.1.2
+LIBARCHIVE_SRC        := $(LIBARCHIVE)-$(LIBARCHIVE_VERSION).tar.gz
+LIBARCHIVE_DOWNLOAD   := http://www.libarchive.org/downloads/$(LIBARCHIVE_SRC)
+LIBARCHIVE_DIR        := $(LIBARCHIVE)-$(LIBARCHIVE_VERSION)
 
 LIBCONFIG             := libconfig
-LIBCONFIG_VERSION     := $(LIBCONFIG)-1.5
-LIBCONFIG_SRC         := $(LIBCONFIG_VERSION).tar.gz
-LIBCONFIG_DOWNLOAD    := https://github.com/hyperrealm/libconfig/archive/v1.5.tar.gz
+LIBCONFIG_VERSION     := 1.5
+LIBCONFIG_SRC         := $(LIBCONFIG)-$(LIBCONFIG_VERSION).tar.gz
+LIBCONFIG_DOWNLOAD    := https://github.com/hyperrealm/libconfig/archive/v$(LIBCONFIG_VERSION).tar.gz
+LIBCONFIG_DIR         := $(LIBCONFIG)-$(LIBCONFIG_VERSION)
 
 LIBEXIF               := libexif
-LIBEXIF_VERSION       := $(LIBEXIF)-0.6.21
-LIBEXIF_SRC           := $(LIBEXIF_VERSION).tar.bz2
-LIBEXIF_DOWNLOAD      := http://sourceforge.net/projects/libexif/files/libexif/0.6.21/libexif-0.6.21.tar.bz2/download
+LIBEXIF_VERSION       := 0.6.21
+LIBEXIF_SRC           := $(LIBEXIF)-$(LIBEXIF_VERSION).tar.bz2
+LIBEXIF_DOWNLOAD      := http://sourceforge.net/projects/libexif/files/libexif/$(LIBEXIF_VERSION)/$(LIBEXIF_SRC)/download
+LIBEXIF_DIR           := $(LIBEXIF)-$(LIBEXIF_VERSION)
 
 LIBJPEGTURBO          := libjpeg-turbo
-LIBJPEGTURBO_VERSION  := $(LIBJPEGTURBO)-1.4.2
-LIBJPEGTURBO_SRC      := $(LIBJPEGTURBO_VERSION).tar.gz
-LIBJPEGTURBO_DOWNLOAD := http://sourceforge.net/projects/libjpeg-turbo/files/1.4.2/libjpeg-turbo-1.4.2.tar.gz/download
+LIBJPEGTURBO_VERSION  := 1.4.2
+LIBJPEGTURBO_SRC      := $(LIBJPEGTURBO)-$(LIBJPEGTURBO_VERSION).tar.gz
+LIBJPEGTURBO_DOWNLOAD := http://sourceforge.net/projects/libjpeg-turbo/files/$(LIBJPEGTURBO_VERSION)/$(LIBJPEGTURBO_SRC)/download
+LIBJPEGTURBO_DIR      := $(LIBJPEGTURBO)-$(LIBJPEGTURBO_VERSION)
 
 LIBMAD                := libmad
-LIBMAD_VERSION        := $(LIBMAD)-0.15.1b
-LIBMAD_SRC            := $(LIBMAD_VERSION).tar.gz
-LIBMAD_DOWNLOAD       := http://sourceforge.net/projects/mad/files/libmad/0.15.1b/libmad-0.15.1b.tar.gz
+LIBMAD_VERSION        := 0.15.1b
+LIBMAD_SRC            := $(LIBMAD)-$(LIBMAD_VERSION).tar.gz
+LIBMAD_DOWNLOAD       := http://sourceforge.net/projects/mad/files/libmad/$(LIBMAD_VERSION)/$(LIBMAD_SRC)
+LIBMAD_DIR            := $(LIBMAD)-$(LIBMAD_VERSION)
 
 LIBOGG                := libogg
-LIBOGG_VERSION        := $(LIBOGG)-1.3.2
-LIBOGG_SRC            := $(LIBOGG_VERSION).tar.xz
-LIBOGG_DOWNLOAD       := http://downloads.xiph.org/releases/ogg/libogg-1.3.2.tar.xz
+LIBOGG_VERSION        := 1.3.2
+LIBOGG_SRC            := $(LIBOGG)-$(LIBOGG_VERSION).tar.xz
+LIBOGG_DOWNLOAD       := http://downloads.xiph.org/releases/ogg/$(LIBOGG_SRC)
+LIBOGG_DIR            := $(LIBOGG)-$(LIBOGG_VERSION)
 
 LIBOPUS               := libopus
-LIBOPUS_VERSION       := opus-1.2.1
-LIBOPUS_SRC           := $(LIBOPUS_VERSION).tar.gz
-LIBOPUS_DOWNLOAD      := https://archive.mozilla.org/pub/opus/opus-1.2.1.tar.gz
+LIBOPUS_VERSION       := 1.2.1
+LIBOPUS_SRC           := opus-$(LIBOPUS_VERSION).tar.gz
+LIBOPUS_DOWNLOAD      := https://archive.mozilla.org/pub/opus/$(LIBOPUS_SRC)
+LIBOPUS_DIR           := opus-$(LIBOPUS_VERSION)
 
 LIBPNG                := libpng
-LIBPNG_VERSION        := $(LIBPNG)-1.6.21
-LIBPNG_SRC            := $(LIBPNG_VERSION).tar.xz
-LIBPNG_DOWNLOAD       := http://prdownloads.sourceforge.net/libpng/libpng-1.6.21.tar.xz?download
+LIBPNG_VERSION        := 1.6.21
+LIBPNG_SRC            := $(LIBPNG)-$(LIBPNG_VERSION).tar.xz
+LIBPNG_DOWNLOAD       := http://prdownloads.sourceforge.net/libpng/$(LIBPNG_SRC)?download
+LIBPNG_DIR            := $(LIBPNG)-$(LIBPNG_VERSION)
 
 LIBXMP_LITE           := libxmp-lite
-LIBXMP_LITE_VERSION   := $(LIBXMP_LITE)-4.3.10
-LIBXMP_LITE_SRC       := $(LIBXMP_LITE_VERSION).tar.gz
-LIBXMP_LITE_DOWNLOAD  := http://sourceforge.net/projects/xmp/files/libxmp/4.3.10/libxmp-lite-4.3.10.tar.gz/download
+LIBXMP_LITE_VERSION   := 4.3.10
+LIBXMP_LITE_SRC       := $(LIBXMP_LITE)-$(LIBXMP_LITE_VERSION).tar.gz
+LIBXMP_LITE_DOWNLOAD  := http://sourceforge.net/projects/xmp/files/libxmp/$(LIBXMP_LITE_VERSION)/$(LIBXMP_LITE_SRC)/download
+LIBXMP_LITE_DIR       := $(LIBXMP_LITE)-$(LIBXMP_LITE_VERSION)
 
 MBED                  := mbedtls
-MBED_VERSION          := $(MBED)-2.7.0
+MBED_VERSION          := 2.7.0
+MBED_DIR              := $(MBED)-$(MBED_VERSION)
 
 MBED_APACHE           := $(MBED)-apache
-MBED_APACHE_SRC       := $(MBED_VERSION)-apache.tgz
+MBED_APACHE_SRC       := $(MBED)-$(MBED_VERSION)-apache.tgz
 MBED_APACHE_DOWNLOAD  := https://tls.mbed.org/download/$(MBED_APACHE_SRC)
 
 MBED_GPL              := $(MBED)-gpl
-MBED_GPL_SRC          := $(MBED_VERSION)-gpl.tgz
+MBED_GPL_SRC          := $(MBED)-$(MBED_VERSION)-gpl.tgz
 MBED_GPL_DOWNLOAD     := https://tls.mbed.org/download/$(MBED_GPL_SRC)
 
 OPUSFILE              := opusfile
-OPUSFILE_VERSION      := $(OPUSFILE)-0.9
-OPUSFILE_SRC          := $(OPUSFILE_VER).tar.gz
-OPUSFILE_DOWNLOAD     := https://downloads.xiph.org/releases/opus/opusfile-0.9.tar.gz
+OPUSFILE_VERSION      := 0.9
+OPUSFILE_SRC          := $(OPUSFILE)-$(OPUSFILE_VERSION).tar.gz
+OPUSFILE_DOWNLOAD     := https://downloads.xiph.org/releases/opus/$(OPUSFILE_SRC)
+OPUSFILE_DIR          := $(OPUSFILE)-$(OPUSFILE_VERSION)
 
 TINYXML               := tinyxml2
-TINYXML_VERSION       := $(TINYXML)-3.0.0
-TINYXML_SRC           := $(TINYXML_VERSION).tar.gz
-TINYXML_DOWNLOAD      := https://github.com/leethomason/tinyxml2/archive/3.0.0.tar.gz
+TINYXML_VERSION       := 3.0.0
+TINYXML_SRC           := $(TINYXML)-$(TINYXML_VERSION).tar.gz
+TINYXML_DOWNLOAD      := https://github.com/leethomason/tinyxml2/archive/$(TINYXML_VERSION).tar.gz
+TINYXML_DIR           := $(TINYXML)-$(TINYXML_VERSION)
 
 # Tremor Low Memory Branch
 TREMOR                := tremor
-TREMOR_VERSION        := $(TREMOR)-293fd1c
-TREMOR_SRC            := $(TREMOR_VERSION).tar.gz
+TREMOR_VERSION        := 293fd1c
+TREMOR_SRC            := $(TREMOR)-$(TREMOR_VERSION).tar.gz
 TREMOR_DOWNLOAD       := https://git.xiph.org/?p=tremor.git;a=snapshot;h=293fd1c04f9d4489be6d4b2b1ca8698f2f902e8e;sf=tgz
+TREMOR_DIR            := $(TREMOR)-$(TREMOR_VERSION)
 
 XZ                    := xz
-XZ_VERSION            := $(XZ)-5.2.2
-XZ_SRC                := $(XZ_VERSION).tar.xz
-XZ_DOWNLOAD           := http://tukaani.org/xz/xz-5.2.2.tar.xz
+XZ_VERSION            := 5.2.2
+XZ_SRC                := $(XZ)-$(XZ_VERSION).tar.xz
+XZ_DOWNLOAD           := http://tukaani.org/xz/$(XZ_SRC)
+XZ_DIR                := $(XZ)-$(XZ_VERSION)
 
 MIKMOD                := libmikmod
-MIKMOD_VERSION        := $(MIKMOD)-3.3.11.1
-MIKMOD_SRC            := $(MIKMOD_VERSION).tar.gz
-MIKMOD_DOWNLOAD       := http://sourceforge.net/projects/mikmod/files/libmikmod/3.3.11.1/libmikmod-3.3.11.1.tar.gz/download
+MIKMOD_VERSION        := 3.3.11.1
+MIKMOD_SRC            := $(MIKMOD)-$(MIKMOD_VERSION).tar.gz
+MIKMOD_DOWNLOAD       := http://sourceforge.net/projects/mikmod/files/libmikmod/$(MIKMOD_VERSION)/$(MIKMOD_SRC)/download
+MIKMOD_DIR            := $(MIKMOD)-$(MIKMOD_VERSION)
 
 ZLIB                  := zlib
-ZLIB_VERSION          := $(ZLIB)-1.2.8
-ZLIB_SRC              := $(ZLIB_VERSION).tar.gz
-ZLIB_DOWNLOAD         := http://prdownloads.sourceforge.net/libpng/zlib-1.2.8.tar.gz?download
+ZLIB_VERSION          := 1.2.8
+ZLIB_SRC              := $(ZLIB)-$(ZLIB_VERSION).tar.gz
+ZLIB_DOWNLOAD         := http://prdownloads.sourceforge.net/libpng/$(ZLIB_SRC)?download
+ZLIB_DIR              := $(ZLIB)-$(ZLIB_VERSION)
 
 export PORTLIBS_PATH  := $(DEVKITPRO)/portlibs
 export PATH           := $(DEVKITARM)/bin:$(PORTLIBS_PATH)/3ds/bin:$(PORTLIBS_PATH)/armv6k/bin:$(PATH)
@@ -269,220 +290,219 @@ $(ZLIB_SRC):
 	@$(call DOWNLOAD,$@,$(ZLIB_DOWNLOAD))
 
 $(BZIP2): $(BZIP2_SRC)
-	@[ -d $(BZIP2_VERSION) ] || tar -xzf $<
-	@cd $(BZIP2_VERSION)
-	@$(MAKE) -C $(BZIP2_VERSION) CC=arm-none-eabi-gcc AR=arm-none-eabi-ar RANLIB=arm-none-eabi-ranlib CPPFLAGS="$(CPPFLAGS)" CFLAGS="-D_FILE_OFFSET_BITS=64 -Winline $(CFLAGS)" libbz2.a
+	@[ -d $(BZIP2_DIR) ] || tar -xzf $<
+	@cd $(BZIP2_DIR)
+	@$(MAKE) -C $(BZIP2_DIR) CC=arm-none-eabi-gcc AR=arm-none-eabi-ar RANLIB=arm-none-eabi-ranlib CPPFLAGS="$(CPPFLAGS)" CFLAGS="-D_FILE_OFFSET_BITS=64 -Winline $(CFLAGS)" libbz2.a
 
 $(CURL): $(CURL_SRC)
-	@[ -d $(CURL_VERSION) ] || tar -xjf $<
-	@cd $(CURL_VERSION) && \
+	@[ -d $(CURL_DIR) ] || tar -xjf $<
+	@cd $(CURL_DIR) && \
 	 patch -Np1 -i ../curl-7.58.0.patch && \
 	 ./configure CFLAGS="$(CFLAGS)" CPPFLAGS="$(CPPFLAGS)" --prefix=$(PORTLIBS_PATH)/3ds --host=arm-none-eabi --disable-shared --enable-static --disable-ipv6 --disable-unix-sockets --disable-manual --disable-ntlm-wb --disable-threaded-resolver --with-mbedtls=$(PORTLIBS_PATH)/3ds
-	@$(MAKE) -C $(CURL_VERSION)/lib
+	@$(MAKE) -C $(CURL_DIR)/lib
 
 $(FREETYPE): $(FREETYPE_SRC)
-	@[ -d $(FREETYPE_VERSION) ] || tar -xjf $<
-	@cd $(FREETYPE_VERSION) && \
+	@[ -d $(FREETYPE_DIR) ] || tar -xjf $<
+	@cd $(FREETYPE_DIR) && \
 	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static --without-harfbuzz
-	@$(MAKE) -C $(FREETYPE_VERSION)
+	@$(MAKE) -C $(FREETYPE_DIR)
 
 $(GIFLIB): $(GIFLIB_SRC)
-	@[ -d $(GIFLIB_VERSION) ] || tar -xjf $<
-	@cd $(GIFLIB_VERSION) && \
+	@[ -d $(GIFLIB_DIR) ] || tar -xjf $<
+	@cd $(GIFLIB_DIR) && \
 	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
-	@$(MAKE) -C $(GIFLIB_VERSION)
+	@$(MAKE) -C $(GIFLIB_DIR)
 
 $(JANSSON): $(JANSSON_SRC)
-	@[ -d $(JANSSON_VERSION) ] || tar -xjf $<
-	@cd $(JANSSON_VERSION) && \
+	@[ -d $(JANSSON_DIR) ] || tar -xjf $<
+	@cd $(JANSSON_DIR) && \
 	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
-	@$(MAKE) -C $(JANSSON_VERSION)
+	@$(MAKE) -C $(JANSSON_DIR)
 
 $(LIBARCHIVE): $(LIBARCHIVE_SRC)
-	@[ -d $(LIBARCHIVE_VERSION) ] || tar -xzf $<
-	@cd $(LIBARCHIVE_VERSION) && \
-	patch -Np1 -i ../libarchive-3.1.2.patch && \
+	@[ -d $(LIBARCHIVE_DIR) ] || tar -xzf $<
+	@cd $(LIBARCHIVE_DIR) && \
+	patch -Np1 -i ../libarchive-$(LIBARCHIVE_VERSION).patch && \
 	./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static --without-nettle --without-openssl --without-xml2 --without-expat --without-iconv --disable-bsdtar --disable-bsdcpio --disable-acl
-	@$(MAKE) -C $(LIBARCHIVE_VERSION)
+	@$(MAKE) -C $(LIBARCHIVE_DIR)
 
 $(LIBCONFIG): $(LIBCONFIG_SRC)
-	@[ -d $(LIBCONFIG_VERSION) ] || tar -xzf $<
-	@cd $(LIBCONFIG_VERSION) && \
+	@[ -d $(LIBCONFIG_DIR) ] || tar -xzf $<
+	@cd $(LIBCONFIG_DIR) && \
 	 autoreconf -i && \
 	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-cxx --disable-examples
-	@$(MAKE) -C $(LIBCONFIG_VERSION)/lib
+	@$(MAKE) -C $(LIBCONFIG_DIR)/lib
 
 $(LIBEXIF): $(LIBEXIF_SRC)
-	@[ -d $(LIBEXIF_VERSION) ] || tar -xjf $<
-	@cd $(LIBEXIF_VERSION) && \
+	@[ -d $(LIBEXIF_DIR) ] || tar -xjf $<
+	@cd $(LIBEXIF_DIR) && \
 	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
-	@$(MAKE) -C $(LIBEXIF_VERSION)
+	@$(MAKE) -C $(LIBEXIF_DIR)
 
 $(LIBJPEGTURBO): $(LIBJPEGTURBO_SRC)
-	@[ -d $(LIBJPEGTURBO_VERSION) ] || tar -xzf $<
-	@cd $(LIBJPEGTURBO_VERSION) && \
+	@[ -d $(LIBJPEGTURBO_DIR) ] || tar -xzf $<
+	@cd $(LIBJPEGTURBO_DIR) && \
 	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
-	@$(MAKE) -C $(LIBJPEGTURBO_VERSION)
+	@$(MAKE) -C $(LIBJPEGTURBO_DIR)
 
 $(LIBMAD): $(LIBMAD_SRC)
-	@[ -d $(LIBMAD_VERSION) ] || tar -xzf $<
-	@cd $(LIBMAD_VERSION) && \
-	 patch -Np1 -i ../libmad-0.15.1b.patch && \
+	@[ -d $(LIBMAD_DIR) ] || tar -xzf $<
+	@cd $(LIBMAD_DIR) && \
+	 patch -Np1 -i ../libmad-$(LIBMAD_VERSION).patch && \
 	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
-	@$(MAKE) -C $(LIBMAD_VERSION)
+	@$(MAKE) -C $(LIBMAD_DIR)
 
 $(LIBOGG): $(LIBOGG_SRC)
-	@[ -d $(LIBOGG_VERSION) ] || tar -xJf $<
-	@cd $(LIBOGG_VERSION) && \
+	@[ -d $(LIBOGG_DIR) ] || tar -xJf $<
+	@cd $(LIBOGG_DIR) && \
 	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
-	@$(MAKE) -C $(LIBOGG_VERSION)
+	@$(MAKE) -C $(LIBOGG_DIR)
 
 $(LIBOPUS): $(LIBOPUS_SRC)
-	@[ -d $(LIBOPUS_VERSION) ] || tar -xzf $<
-	@cd $(LIBOPUS_VERSION) && \
+	@[ -d $(LIBOPUS_DIR) ] || tar -xzf $<
+	@cd $(LIBOPUS_DIR) && \
 	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
-	@$(MAKE) -C $(LIBOPUS_VERSION)
+	@$(MAKE) -C $(LIBOPUS_DIR)
 
 $(LIBPNG): $(LIBPNG_SRC)
-	@[ -d $(LIBPNG_VERSION) ] || tar -xJf $<
-	@cd $(LIBPNG_VERSION) && \
+	@[ -d $(LIBPNG_DIR) ] || tar -xJf $<
+	@cd $(LIBPNG_DIR) && \
 	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
-	@$(MAKE) -C $(LIBPNG_VERSION)
+	@$(MAKE) -C $(LIBPNG_DIR)
 
 $(LIBXMP_LITE): $(LIBXMP_LITE_SRC)
-	@[ -d $(LIBXMP_LITE_VERSION) ] || tar -xzf $<
-	@cd $(LIBXMP_LITE_VERSION) && \
+	@[ -d $(LIBXMP_LITE_DIR) ] || tar -xzf $<
+	@cd $(LIBXMP_LITE_DIR) && \
 	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
-	@$(MAKE) -C $(LIBXMP_LITE_VERSION)
+	@$(MAKE) -C $(LIBXMP_LITE_DIR)
 
 $(MBED_APACHE): $(MBED_APACHE_SRC)
-	@[ -d $(MBED_VERSION)-apache ] || { tar -xzf $< && mv $(MBED_VERSION) $(MBED_VERSION)-apache; }
-	@cd $(MBED_VERSION)-apache && \
-	 patch -Np1 -i ../libmbedtls-2.7.0.patch && \
+	@[ -d $(MBED_DIR)-apache ] || { tar -xzf $< && mv $(MBED_DIR) $(MBED_DIR)-apache; }
+	@cd $(MBED_DIR)-apache && \
+	 patch -Np1 -i ../libmbedtls-$(MBED_VERSION).patch && \
 	 cmake -DCMAKE_SYSTEM_NAME=Generic -DCMAKE_C_COMPILER=$(DEVKITARM)/bin/arm-none-eabi-gcc \
 	 -DCMAKE_CXX_COMPILER=$(DEVKITARM)/bin/arm-none-eabi-g++ \
 	 -DCMAKE_INSTALL_PREFIX=$(PORTLIBS_PATH)/3ds -DCMAKE_C_FLAGS="$(CFLAGS) $(CPPFLAGS)" \
 	 -DCMAKE_CXX_FLAGS="$(CFLAGS) -fno-exceptions -fno-rtti" \
 	 -DZLIB_ROOT="$(PORTLIBS_PATH)/armv6k" \
 	 -DENABLE_ZLIB_SUPPORT=TRUE -DENABLE_TESTING=FALSE -DENABLE_PROGRAMS=FALSE .
-	@$(MAKE) -C $(MBED_VERSION)-apache
+	@$(MAKE) -C $(MBED_DIR)-apache
 
 $(MBED_GPL): $(MBED_GPL_SRC)
-	@[ -d $(MBED_VERSION)-gpl ] || { tar -xzf $< && mv $(MBED_VERSION) $(MBED_VERSION)-gpl; }
-	@cd $(MBED_VERSION)-gpl && \
-	 patch -Np1 -i ../libmbedtls-2.7.0.patch && \
+	@[ -d $(MBED_DIR)-gpl ] || { tar -xzf $< && mv $(MBED_DIR) $(MBED_DIR)-gpl; }
+	@cd $(MBED_DIR)-gpl && \
+	 patch -Np1 -i ../libmbedtls-$(MBED_VERSION).patch && \
 	 cmake -DCMAKE_SYSTEM_NAME=Generic -DCMAKE_C_COMPILER=$(DEVKITARM)/bin/arm-none-eabi-gcc \
 	 -DCMAKE_CXX_COMPILER=$(DEVKITARM)/bin/arm-none-eabi-g++ \
 	 -DCMAKE_INSTALL_PREFIX=$(PORTLIBS_PATH)/3ds -DCMAKE_C_FLAGS="$(CFLAGS) $(CPPFLAGS)" \
 	 -DCMAKE_CXX_FLAGS="$(CFLAGS) -fno-exceptions -fno-rtti" \
 	 -DZLIB_ROOT="$(PORTLIBS_PATH)/armv6k" \
 	 -DENABLE_ZLIB_SUPPORT=TRUE -DENABLE_TESTING=FALSE -DENABLE_PROGRAMS=FALSE .
-	@$(MAKE) -C $(MBED_VERSION)-gpl
+	@$(MAKE) -C $(MBED_DIR)-gpl
 
 $(OPUSFILE): $(OPUSFILE_SRC)
-	@[ -d $(OPUSFILE_VERSION) ] || tar -xzf $<
-	@cd $(OPUSFILE_VERSION) && \
+	@[ -d $(OPUSFILE_DIR) ] || tar -xzf $<
+	@cd $(OPUSFILE_DIR) && \
 	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
-	@$(MAKE) -C $(OPUSFILE_VERSION)
-
+	@$(MAKE) -C $(OPUSFILE_DIR)
 
 # tinyxml2 uses cmake
 $(TINYXML): $(TINYXML_SRC)
-	@[ -d $(TINYXML_VERSION) ] || tar -xzf $<
-	@cd $(TINYXML_VERSION) && cmake -DCMAKE_SYSTEM_NAME=Generic -DCMAKE_C_COMPILER=$(DEVKITARM)/bin/arm-none-eabi-gcc -DCMAKE_CXX_COMPILER=$(DEVKITARM)/bin/arm-none-eabi-g++ -DCMAKE_INSTALL_PREFIX=$(PORTLIBS_PATH)/armv6k -DCMAKE_C_FLAGS="$(CFLAGS)" -DCMAKE_CXX_FLAGS="$(CFLAGS) -fno-exceptions -fno-rtti" . && make
+	@[ -d $(TINYXML_DIR) ] || tar -xzf $<
+	@cd $(TINYXML_DIR) && cmake -DCMAKE_SYSTEM_NAME=Generic -DCMAKE_C_COMPILER=$(DEVKITARM)/bin/arm-none-eabi-gcc -DCMAKE_CXX_COMPILER=$(DEVKITARM)/bin/arm-none-eabi-g++ -DCMAKE_INSTALL_PREFIX=$(PORTLIBS_PATH)/armv6k -DCMAKE_C_FLAGS="$(CFLAGS)" -DCMAKE_CXX_FLAGS="$(CFLAGS) -fno-exceptions -fno-rtti" . && make
 
 $(TREMOR): $(TREMOR_SRC)
-	@[ -d $(TREMOR_VERSION) ] || tar -xzf $<
-	@cd $(TREMOR_VERSION) && \
+	@[ -d $(TREMOR_DIR) ] || tar -xzf $<
+	@cd $(TREMOR_DIR) && \
 	 ./autogen.sh --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --disable-oggtest
-	@$(MAKE) -C $(TREMOR_VERSION)
+	@$(MAKE) -C $(TREMOR_DIR)
 
 $(XZ): $(XZ_SRC)
-	@[ -d $(XZ_VERSION) ] || tar -xJf $<
-	@cd $(XZ_VERSION) && \
+	@[ -d $(XZ_DIR) ] || tar -xJf $<
+	@cd $(XZ_DIR) && \
 	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static --disable-xz --enable-threads=no
-	@$(MAKE) -C $(XZ_VERSION)
+	@$(MAKE) -C $(XZ_DIR)
 
 $(MIKMOD): $(MIKMOD_SRC)
-	@[ -d $(MIKMOD_VERSION) ] || tar -xzf $<
-	@cd $(MIKMOD_VERSION) && \
+	@[ -d $(MIKMOD_DIR) ] || tar -xzf $<
+	@cd $(MIKMOD_DIR) && \
 	 ./configure --prefix=$(PORTLIBS_PATH)/armv6k --host=arm-none-eabi --disable-shared --enable-static
-	@$(MAKE) -C $(MIKMOD_VERSION)
+	@$(MAKE) -C $(MIKMOD_DIR)
 
 $(ZLIB): $(ZLIB_SRC)
-	@[ -d $(ZLIB_VERSION) ] || tar -xzf $<
-	@cd $(ZLIB_VERSION) && \
+	@[ -d $(ZLIB_DIR) ] || tar -xzf $<
+	@cd $(ZLIB_DIR) && \
 	 CHOST=arm-none-eabi ./configure --static --prefix=$(PORTLIBS_PATH)/armv6k
-	@$(MAKE) -C $(ZLIB_VERSION)
+	@$(MAKE) -C $(ZLIB_DIR)
 
 install-$(ZLIB):
-	@$(MAKE) -C $(ZLIB_VERSION) install
+	@$(MAKE) -C $(ZLIB_DIR) install
 
 install-$(MBED_APACHE):
-	@$(MAKE) -C $(MBED_VERSION)-apache install
+	@$(MAKE) -C $(MBED_DIR)-apache install
 
 install-$(MBED_GPL):
-	@$(MAKE) -C $(MBED_VERSION)-gpl install
+	@$(MAKE) -C $(MBED_DIR)-gpl install
 
 install-$(BZIP2):
-	@if [ -d $(BZIP2_VERSION) ]; then \
-		$(INSTALL_DATA) $(BZIP2_VERSION)/bzlib.h $(DESTDIR)$(PORTLIBS_PATH)/armv6k/include/bzlib.h; \
-		$(INSTALL_DATA) $(BZIP2_VERSION)/libbz2.a $(DESTDIR)$(PORTLIBS_PATH)/armv6k/lib/libbz2.a; \
+	@if [ -d $(BZIP2_DIR) ]; then \
+		$(INSTALL_DATA) $(BZIP2_DIR)/bzlib.h $(DESTDIR)$(PORTLIBS_PATH)/armv6k/include/bzlib.h; \
+		$(INSTALL_DATA) $(BZIP2_DIR)/libbz2.a $(DESTDIR)$(PORTLIBS_PATH)/armv6k/lib/libbz2.a; \
 	fi
 
 install-$(CURL):
-	@[ -d $(CURL_VERSION) ] && { $(MAKE) -c $(CURL_VERSION)/lib install && $(MAKE) -C $(CURL_VERSION)/include install; }
+	@[ -d $(CURL_VERSION) ] && { $(MAKE) -c $(CURL_DIR)/lib install && $(MAKE) -C $(CURL_VERSION)/include install; }
 
 install-$(FREETYPE):
-	@[ -d $(FREETYPE_VERSION) ] && $(MAKE) -C $(FREETYPE_VERSION) install
+	@[ -d $(FREETYPE_DIR) ] && $(MAKE) -C $(FREETYPE_DIR) install
 
 install-$(GIFLIB):
-	@[ -d $(GIFLIB_VERSION) ] && $(MAKE) -C $(GIFLIB_VERSION) install
+	@[ -d $(GIFLIB_DIR) ] && $(MAKE) -C $(GIFLIB_DIR) install
 
 install-$(JANSSON):
-	@[ -d $(JANSSON_VERSION) ] && $(MAKE) -C $(JANSSON_VERSION) install
+	@[ -d $(JANSSON_DIR) ] && $(MAKE) -C $(JANSSON_DIR) install
 
 install-$(LIBARCHIVE):
-	@[ -d $(LIBARCHIVE_VERSION) ] && $(MAKE) -C $(LIBARCHIVE_VERSION) install
+	@[ -d $(LIBARCHIVE_DIR) ] && $(MAKE) -C $(LIBARCHIVE_DIR) install
 
 install-$(LIBCONFIG):
-	@[ -d $(LIBCONFIG_VERSION) ] && $(MAKE) -C $(LIBCONFIG_VERSION)/lib install
+	@[ -d $(LIBCONFIG_DIR) ] && $(MAKE) -C $(LIBCONFIG_DIR)/lib install
 
 install-$(LIBEXIF):
-	@[ -d $(LIBEXIF_VERSION) ] && $(MAKE) -C $(LIBEXIF_VERSION) install
+	@[ -d $(LIBEXIF_DIR) ] && $(MAKE) -C $(LIBEXIF_DIR) install
 
 install-$(LIBJPEGTURBO):
-	@[ -d $(LIBJPEGTURBO_VERSION) ] && $(MAKE) -C $(LIBJPEGTURBO_VERSION) install
+	@[ -d $(LIBJPEGTURBO_DIR) ] && $(MAKE) -C $(LIBJPEGTURBO_DIR) install
 
 install-$(LIBMAD):
-	@[ -d $(LIBMAD_VERSION) ] && $(MAKE) -C $(LIBMAD_VERSION) install
+	@[ -d $(LIBMAD_DIR) ] && $(MAKE) -C $(LIBMAD_DIR) install
 
 install-$(LIBOGG):
-	@[ -d $(LIBOGG_VERSION) ] && $(MAKE) -C $(LIBOGG_VERSION) install
+	@[ -d $(LIBOGG_DIR) ] && $(MAKE) -C $(LIBOGG_DIR) install
 
 install-$(LIBOPUS):
-	@[ -d $(LIBOPUS_VERSION) ] && $(MAKE) -C $(LIBOPUS_VERSION) install
+	@[ -d $(LIBOPUS_DIR) ] && $(MAKE) -C $(LIBOPUS_DIR) install
 
 install-$(LIBPNG):
-	@[ -d $(LIBPNG_VERSION) ] && $(MAKE) -C $(LIBPNG_VERSION) install
+	@[ -d $(LIBPNG_DIR) ] && $(MAKE) -C $(LIBPNG_DIR) install
 
 install-$(LIBXMP_LITE):
-	@[ -d $(LIBXMP_LITE_VERSION) ] && $(MAKE) -C $(LIBXMP_LITE_VERSION) install
+	@[ -d $(LIBXMP_LITE_DIR) ] && $(MAKE) -C $(LIBXMP_LITE_DIR) install
 
 install-$(OPUSFILE):
-	@[ -d $(OPUSFILE_VERSION) ] && $(MAKE) -C $(OPUSFILE_VERSION) install
+	@[ -d $(OPUSFILE_DIR) ] && $(MAKE) -C $(OPUSFILE_DIR) install
 
 install-$(TINYXML):
-	@[ -d $(TINYXML_VERSION) ] && $(MAKE) -C $(TINYXML_VERSION) install
+	@[ -d $(TINYXML_DIR) ] && $(MAKE) -C $(TINYXML_DIR) install
 
 install-$(TREMOR):
-	@[ -d $(TREMOR_VERSION) ] && $(MAKE) -C $(TREMOR_VERSION) install
+	@[ -d $(TREMOR_DIR) ] && $(MAKE) -C $(TREMOR_DIR) install
 
 install-$(MIKMOD):
-	@[ -d $(MIKMOD_VERSION) ] && $(MAKE) -C $(MIKMOD_VERSION) install
+	@[ -d $(MIKMOD_DIR) ] && $(MAKE) -C $(MIKMOD_DIR) install
 
 install-$(XZ):
-	@[ -d $(XZ_VERSION) ] && $(MAKE) -C $(XZ_VERSION) install
+	@[ -d $(XZ_DIR) ] && $(MAKE) -C $(XZ_DIR) install
 
 install: install-$(BZIP2) install-$(CURL) install-$(FREETYPE) install-$(GIFLIB) install-$(JANSSON) install-$(LIBARCHIVE) install-$(LIBCONFIG) install-$(LIBEXIF) install-$(LIBJPEGTURBO) install-$(LIBMAD) install-$(LIBOGG) install-$(LIBOPUS) install-$(LIBPNG) install-$(LIBXMP_LITE) install-$(OPUSFILE) install-$(TINYXML) install-$(TREMOR) install-$(MIKMOD) install-$(XZ)
 
@@ -499,25 +519,25 @@ $(DESTDIR)$(DEVKITPRO)/portlibs/3ds/bin/arm-none-eabi-pkg-config : $(DESTDIR)$(D
 	$(INSTALL_DATA) 3ds-arm-none-eabi-pkg-config $@
 
 clean:
-	@$(RM) -r $(BZIP2_VERSION)
-	@$(RM) -r $(CURL_VERSION)
-	@$(RM) -r $(FREETYPE_VERSION)
-	@$(RM) -r $(GIFLIB_VERSION)
-	@$(RM) -r $(JANSSON_VERSION)
-	@$(RM) -r $(LIBARCHIVE_VERSION)
-	@$(RM) -r $(LIBCONFIG_VERSION)
-	@$(RM) -r $(LIBEXIF_VERSION)
-	@$(RM) -r $(LIBJPEGTURBO_VERSION)
-	@$(RM) -r $(LIBMAD_VERSION)
-	@$(RM) -r $(LIBOGG_VERSION)
-	@$(RM) -r $(LIBOPUS_VERSION)
-	@$(RM) -r $(LIBPNG_VERSION)
-	@$(RM) -r $(LIBXMP_LITE_VERSION)
-	@$(RM) -r $(MBED_VERSION)-apache
-	@$(RM) -r $(MBED_VERSION)-gpl
-	@$(RM) -r $(OPUSFILE_VERSION)
-	@$(RM) -r $(TINYXML_VERSION)
-	@$(RM) -r $(TREMOR_VERSION)
-	@$(RM) -r $(XZ_VERSION)
-	@$(RM) -r $(MIKMOD_VERSION)
-	@$(RM) -r $(ZLIB_VERSION)
+	@$(RM) -r $(BZIP2_DIR)
+	@$(RM) -r $(CURL_DIR)
+	@$(RM) -r $(FREETYPE_DIR)
+	@$(RM) -r $(GIFLIB_DIR)
+	@$(RM) -r $(JANSSON_DIR)
+	@$(RM) -r $(LIBARCHIVE_DIR)
+	@$(RM) -r $(LIBCONFIG_DIR)
+	@$(RM) -r $(LIBEXIF_DIR)
+	@$(RM) -r $(LIBJPEGTURBO_DIR)
+	@$(RM) -r $(LIBMAD_DIR)
+	@$(RM) -r $(LIBOGG_DIR)
+	@$(RM) -r $(LIBOPUS_DIR)
+	@$(RM) -r $(LIBPNG_DIR)
+	@$(RM) -r $(LIBXMP_LITE_DIR)
+	@$(RM) -r $(OPUSFILE_DIR)
+	@$(RM) -r $(MBED_DIR)-apache
+	@$(RM) -r $(MBED_DIR)-gpl
+	@$(RM) -r $(TINYXML_DIR)
+	@$(RM) -r $(TREMOR_DIR)
+	@$(RM) -r $(XZ_DIR)
+	@$(RM) -r $(MIKMOD_DIR)
+	@$(RM) -r $(ZLIB_DIR)
