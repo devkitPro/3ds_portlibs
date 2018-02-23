@@ -128,6 +128,25 @@ export LIBS           := -lctru
         install-$(ZLIB) \
         install-$(MBED_APACHE) \
         install-$(MBED_GPL) \
+        install-$(BZIP2) \
+        install-$(CURL) \
+        install-$(FREETYPE) \
+        install-$(GIFLIB) \
+        install-$(JANSSON) \
+        install-$(LIBARCHIVE) \
+        install-$(LIBCONFIG) \
+        install-$(LIBEXIF) \
+        install-$(LIBJPEGTURBO) \
+        install-$(LIBMAD) \
+        install-$(LIBOGG) \
+        install-$(LIBOPUS) \
+        install-$(LIBPNG) \
+        install-$(LIBXMP_LITE) \
+        install-$(OPUSFILE) \
+        install-$(TINYXML) \
+        install-$(TREMOR) \
+        install-$(MIKMOD) \
+        install-$(XZ) \
         clean \
         download \
         $(BZIP2) \
@@ -405,29 +424,67 @@ install-$(MBED_APACHE):
 install-$(MBED_GPL):
 	@$(MAKE) -C $(MBED_VERSION)-gpl install
 
-install:
+install-$(BZIP2):
 	@if [ -d $(BZIP2_VERSION) ]; then \
 		$(INSTALL_DATA) $(BZIP2_VERSION)/bzlib.h $(DESTDIR)$(PORTLIBS_PATH)/armv6k/include/bzlib.h; \
 		$(INSTALL_DATA) $(BZIP2_VERSION)/libbz2.a $(DESTDIR)$(PORTLIBS_PATH)/armv6k/lib/libbz2.a; \
 	fi
-	@[ ! -d $(CURL_VERSION) ] || { $(MAKE) -C $(CURL_VERSION)/lib install && $(MAKE) -C $(CURL_VERSION)/include install; }
-	@[ ! -d $(FREETYPE_VERSION) ] || $(MAKE) -C $(FREETYPE_VERSION) install
-	@[ ! -d $(GIFLIB_VERSION) ] || $(MAKE) -C $(GIFLIB_VERSION) install
-	@[ ! -d $(JANSSON_VERSION) ] || $(MAKE) -C $(JANSSON_VERSION) install
-	@[ ! -d $(LIBARCHIVE_VERSION) ] || $(MAKE) -C $(LIBARCHIVE_VERSION) install
-	@[ ! -d $(LIBCONFIG_VERSION) ] || $(MAKE) -C $(LIBCONFIG_VERSION)/lib install
-	@[ ! -d $(LIBEXIF_VERSION) ] || $(MAKE) -C $(LIBEXIF_VERSION) install
-	@[ ! -d $(LIBJPEGTURBO_VERSION) ] || $(MAKE) -C $(LIBJPEGTURBO_VERSION) install
-	@[ ! -d $(LIBMAD_VERSION) ] || $(MAKE) -C $(LIBMAD_VERSION) install
-	@[ ! -d $(LIBOGG_VERSION) ] || $(MAKE) -C $(LIBOGG_VERSION) install
-	@[ ! -d $(LIBOPUS_VERSION) ] || $(MAKE) -C $(LIBOPUS_VERSION) install
-	@[ ! -d $(LIBPNG_VERSION) ] || $(MAKE) -C $(LIBPNG_VERSION) install
-	@[ ! -d $(LIBXMP_LITE_VERSION) ] || $(MAKE) -C $(LIBXMP_LITE_VERSION) install
-	@[ ! -d $(OPUSFILE_VERSION) ] || $(MAKE) -C $(OPUSFILE_VERSION) install
-	@[ ! -d $(TINYXML_VERSION) ] || $(MAKE) -C $(TINYXML_VERSION) install
-	@[ ! -d $(TREMOR_VERSION) ] || $(MAKE) -C $(TREMOR_VERSION) install
-	@[ ! -d $(MIKMOD_VERSION) ] || $(MAKE) -C $(MIKMOD_VERSION) install
-	@[ ! -d $(XZ_VERSION) ] || $(MAKE) -C $(XZ_VERSION) install
+
+install-$(CURL):
+	@[ -d $(CURL_VERSION) ] && { $(MAKE) -c $(CURL_VERSION)/lib install && $(MAKE) -C $(CURL_VERSION)/include install; }
+
+install-$(FREETYPE):
+	@[ -d $(FREETYPE_VERSION) ] && $(MAKE) -C $(FREETYPE_VERSION) install
+
+install-$(GIFLIB):
+	@[ -d $(GIFLIB_VERSION) ] && $(MAKE) -C $(GIFLIB_VERSION) install
+
+install-$(JANSSON):
+	@[ -d $(JANSSON_VERSION) ] && $(MAKE) -C $(JANSSON_VERSION) install
+
+install-$(LIBARCHIVE):
+	@[ -d $(LIBARCHIVE_VERSION) ] && $(MAKE) -C $(LIBARCHIVE_VERSION) install
+
+install-$(LIBCONFIG):
+	@[ -d $(LIBCONFIG_VERSION) ] && $(MAKE) -C $(LIBCONFIG_VERSION)/lib install
+
+install-$(LIBEXIF):
+	@[ -d $(LIBEXIF_VERSION) ] && $(MAKE) -C $(LIBEXIF_VERSION) install
+
+install-$(LIBJPEGTURBO):
+	@[ -d $(LIBJPEGTURBO_VERSION) ] && $(MAKE) -C $(LIBJPEGTURBO_VERSION) install
+
+install-$(LIBMAD):
+	@[ -d $(LIBMAD_VERSION) ] && $(MAKE) -C $(LIBMAD_VERSION) install
+
+install-$(LIBOGG):
+	@[ -d $(LIBOGG_VERSION) ] && $(MAKE) -C $(LIBOGG_VERSION) install
+
+install-$(LIBOPUS):
+	@[ -d $(LIBOPUS_VERSION) ] && $(MAKE) -C $(LIBOPUS_VERSION) install
+
+install-$(LIBPNG):
+	@[ -d $(LIBPNG_VERSION) ] && $(MAKE) -C $(LIBPNG_VERSION) install
+
+install-$(LIBXMP_LITE):
+	@[ -d $(LIBXMP_LITE_VERSION) ] && $(MAKE) -C $(LIBXMP_LITE_VERSION) install
+
+install-$(OPUSFILE):
+	@[ -d $(OPUSFILE_VERSION) ] && $(MAKE) -C $(OPUSFILE_VERSION) install
+
+install-$(TINYXML):
+	@[ -d $(TINYXML_VERSION) ] && $(MAKE) -C $(TINYXML_VERSION) install
+
+install-$(TREMOR):
+	@[ -d $(TREMOR_VERSION) ] && $(MAKE) -C $(TREMOR_VERSION) install
+
+install-$(MIKMOD):
+	@[ -d $(MIKMOD_VERSION) ] && $(MAKE) -C $(MIKMOD_VERSION) install
+
+install-$(XZ):
+	@[ -d $(XZ_VERSION) ] && $(MAKE) -C $(XZ_VERSION) install
+
+install: install-$(BZIP2) install-$(CURL) install-$(FREETYPE) install-$(GIFLIB) install-$(JANSSON) install-$(LIBARCHIVE) install-$(LIBCONFIG) install-$(LIBEXIF) install-$(LIBJPEGTURBO) install-$(LIBMAD) install-$(LIBOGG) install-$(LIBOPUS) install-$(LIBPNG) install-$(LIBXMP_LITE) install-$(OPUSFILE) install-$(TINYXML) install-$(TREMOR) install-$(MIKMOD) install-$(XZ)
 
 $(DESTDIR)$(DEVKITPRO)/portlibs/armv6k/bin:
 	$(INSTALL_DIR) $@
